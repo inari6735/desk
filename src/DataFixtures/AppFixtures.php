@@ -34,16 +34,16 @@ class AppFixtures extends Fixture
         $manager->persist($userRole);
 
         // --- Users ---
-        $admin = $this->createUser($manager, 'admin@example.com', 'admin', ['ROLE_ADMIN']);
+        $admin = $this->createUser($manager, 'admin@example.com', 'admin', 'Admin', ['ROLE_ADMIN']);
         $admin->addUserRole($adminRole);
 
-        $alice = $this->createUser($manager, 'alice@example.com', 'alice');
+        $alice = $this->createUser($manager, 'alice@example.com', 'alice', 'Alice Johnson');
         $alice->addUserRole($userRole);
 
-        $bob = $this->createUser($manager, 'bob@example.com', 'bob');
+        $bob = $this->createUser($manager, 'bob@example.com', 'bob', 'Bob Smith');
         $bob->addUserRole($userRole);
 
-        $carol = $this->createUser($manager, 'carol@example.com', 'carol');
+        $carol = $this->createUser($manager, 'carol@example.com', 'carol', 'Carol Williams');
         $carol->addUserRole($userRole);
 
         // --- Projects ---
@@ -109,10 +109,11 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createUser(ObjectManager $manager, string $email, string $password, array $roles = []): User
+    private function createUser(ObjectManager $manager, string $email, string $password, string $name, array $roles = []): User
     {
         $user = new User();
         $user->setEmail($email);
+        $user->setName($name);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setRoles($roles);
         $manager->persist($user);

@@ -215,8 +215,40 @@ a:hover {
 }
 
 .navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 0.875rem;
     color: var(--color-text-muted);
+}
+
+/* === Avatars === */
+.avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.avatar-xs {
+    width: 20px;
+    height: 20px;
+    font-size: 0.6rem;
+}
+
+.avatar-sm {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+}
+
+.avatar-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+    line-height: 1;
 }
 
 /* === Home Page === */
@@ -414,7 +446,13 @@ a:hover {
     border-bottom: none;
 }
 
-.member-email {
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.member-name {
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -496,7 +534,10 @@ a:hover {
 }
 
 .todo-assignee {
-    max-width: 140px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

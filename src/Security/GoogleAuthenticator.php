@@ -54,6 +54,8 @@ class GoogleAuthenticator extends OAuth2Authenticator
                 }
 
                 $user->setGoogleId($googleUser->getId());
+                $user->setName($googleUser->getName());
+                $user->setAvatarUrl($googleUser->getAvatar());
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 

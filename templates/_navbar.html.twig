@@ -8,7 +8,14 @@
     </div>
     <div class="navbar-links">
         {% if app.user %}
-            <span class="navbar-user">{{ app.user.email }}</span>
+            <div class="navbar-user">
+                {% if app.user.avatarUrl %}
+                    <img src="{{ app.user.avatarUrl }}" alt="" class="avatar avatar-sm" referrerpolicy="no-referrer">
+                {% else %}
+                    <span class="avatar avatar-sm avatar-placeholder">{{ app.user.displayName|first|upper }}</span>
+                {% endif %}
+                <span>{{ app.user.displayName }}</span>
+            </div>
             <a href="{{ path('app_logout') }}" class="btn btn-outline btn-sm">Sign out</a>
         {% else %}
             <a href="{{ path('app_login') }}" class="btn btn-outline btn-sm">Sign in</a>

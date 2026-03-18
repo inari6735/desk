@@ -38,6 +38,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 512, nullable: true)]
+    private ?string $avatarUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
 
     /** @var Collection<int, Role> */
@@ -52,7 +58,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->email ?? '';
+        return $this->getDisplayName();
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->name ?? $this->email ?? '';
     }
 
     public function getId(): ?Uuid
@@ -114,6 +125,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAvatarUrl(): ?string
+    {
+        return $this->avatarUrl;
+    }
+
+    public function setAvatarUrl(?string $avatarUrl): static
+    {
+        $this->avatarUrl = $avatarUrl;
 
         return $this;
     }

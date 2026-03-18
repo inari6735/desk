@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ todo ? 'Edit' : 'New' }} Todo - {{ project.name }}{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container container-sm">
+        <div class="page-header">
+            <a href="{{ path('app_project_show', {id: project.id}) }}" class="back-link">&larr; {{ project.name }}</a>
+            <h1>{{ todo ? 'Edit' : 'New' }} Todo</h1>
+        </div>
+
+        <div class="form-card">
+            {{ form_start(form, {attr: {class: 'todo-form'}}) }}
+                <div class="form-group">
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title, {attr: {class: 'form-input', placeholder: 'What needs to be done?'}}) }}
+                    {{ form_errors(form.title) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description, {attr: {class: 'form-input form-textarea', rows: 3, placeholder: 'Optional details...'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.status) }}
+                        {{ form_widget(form.status, {attr: {class: 'form-input'}}) }}
+                        {{ form_errors(form.status) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.dueDate) }}
+                        {{ form_widget(form.dueDate, {attr: {class: 'form-input'}}) }}
+                        {{ form_errors(form.dueDate) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.assignedTo) }}
+                    {{ form_widget(form.assignedTo, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(form.assignedTo) }}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">{{ todo ? 'Save Changes' : 'Create Todo' }}</button>
+                    <a href="{{ path('app_project_show', {id: project.id}) }}" class="btn btn-outline">Cancel</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </main>
+</div>
+{% endblock %}

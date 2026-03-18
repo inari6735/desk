@@ -7,6 +7,10 @@
     {% include '_navbar.html.twig' %}
 
     <main class="container">
+        {% for message in app.flashes('success') %}
+            <div class="flash flash-success">{{ message }}</div>
+        {% endfor %}
+
         <div class="page-header">
             <h1>My Todos</h1>
         </div>
@@ -24,10 +28,12 @@
                             <th>Project</th>
                             <th>Status</th>
                             <th>Due Date</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for todo in todos %}
+                            {% set canEdit = editableTodos[todo.id|default('')] is defined %}
                             <tr>
                                 <td>
                                     <span class="todo-title">{{ todo.title }}</span>
@@ -52,6 +58,11 @@
                                         </span>
                                     {% else %}
                                         <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td class="table-actions">
+                                    {% if canEdit %}
+                                        <a href="{{ path('app_todo_edit', {id: todo.id}) }}" class="btn btn-outline btn-xs">Edit</a>
                                     {% endif %}
                                 </td>
                             </tr>

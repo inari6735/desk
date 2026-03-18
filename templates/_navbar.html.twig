@@ -1,5 +1,5 @@
 <nav class="navbar">
-    <a href="{{ path('app_home') }}" class="navbar-brand">Stronka</a>
+    <a href="{{ path('app_home') }}" class="navbar-brand">CREATIVEDESK</a>
     <div class="navbar-nav">
         {% if app.user %}
             <a href="{{ path('app_projects') }}" class="nav-link {{ app.request.attributes.get('_route') starts with 'app_project' ? 'active' : '' }}">Projects</a>

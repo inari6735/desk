@@ -30,6 +30,12 @@ class Todo
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $dueDate = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 7, scale: 1, nullable: true)]
+    private ?string $estimatedHours = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 7, scale: 1, nullable: true)]
+    private ?string $spentHours = null;
+
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
@@ -98,6 +104,30 @@ class Todo
     public function setDueDate(?\DateTimeImmutable $dueDate): static
     {
         $this->dueDate = $dueDate;
+
+        return $this;
+    }
+
+    public function getEstimatedHours(): ?float
+    {
+        return $this->estimatedHours !== null ? (float) $this->estimatedHours : null;
+    }
+
+    public function setEstimatedHours(?float $estimatedHours): static
+    {
+        $this->estimatedHours = $estimatedHours !== null ? (string) $estimatedHours : null;
+
+        return $this;
+    }
+
+    public function getSpentHours(): ?float
+    {
+        return $this->spentHours !== null ? (float) $this->spentHours : null;
+    }
+
+    public function setSpentHours(?float $spentHours): static
+    {
+        $this->spentHours = $spentHours !== null ? (string) $spentHours : null;
 
         return $this;
     }

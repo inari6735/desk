@@ -25,8 +25,17 @@
                         {% endif %}
                         <div class="project-meta">
                             <span class="badge">{{ project.todos|length }} todo{{ project.todos|length != 1 ? 's' : '' }}</span>
+                            {% if project.budgetHours %}
+                                <span class="badge {{ project.budgetUsagePercent > 90 ? 'badge-danger' : '' }}">{{ project.totalSpentHours|number_format(1) }} / {{ project.budgetHours|number_format(1) }}h</span>
+                            {% endif %}
                             <span class="meta-date">{{ project.createdAt|date('M d, Y') }}</span>
                         </div>
+                        {% if project.budgetHours %}
+                            {% set percent = min(max(project.budgetUsagePercent, 0), 100) %}
+                            <div class="progress-track progress-track-sm">
+                                <div class="progress-fill {{ project.budgetUsagePercent > 90 ? 'progress-danger' : (project.budgetUsagePercent > 70 ? 'progress-warning' : '') }}" style="width: {{ percent }}%"></div>
+                            </div>
+                        {% endif %}
                     </a>
                 {% endfor %}
             </div>

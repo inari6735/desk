@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,6 +36,20 @@ class TodoFormType extends AbstractType
                 'required' => false,
                 'widget' => 'single_text',
                 'input' => 'datetime_immutable',
+            ])
+            ->add('estimatedHours', NumberType::class, [
+                'required' => false,
+                'label' => 'Estimate (hours)',
+                'scale' => 1,
+                'attr' => ['step' => '0.5', 'min' => '0'],
+                'html5' => true,
+            ])
+            ->add('spentHours', NumberType::class, [
+                'required' => false,
+                'label' => 'Spent (hours)',
+                'scale' => 1,
+                'attr' => ['step' => '0.5', 'min' => '0'],
+                'html5' => true,
             ])
             ->add('assignedTo', EntityType::class, [
                 'class' => User::class,

@@ -463,6 +463,96 @@ a:hover {
     flex-wrap: wrap;
 }
 
+/* === Budget Bar === */
+.budget-bar {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.budget-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.budget-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.budget-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+
+.budget-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.budget-percent {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+}
+
+/* === Progress Bar === */
+.progress-track {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-track-sm {
+    height: 4px;
+    margin-top: 0.6rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 999px;
+    transition: width 0.3s;
+}
+
+.progress-warning {
+    background: #f59e0b;
+}
+
+.progress-danger {
+    background: #ef4444;
+}
+
+.badge-danger {
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+/* === Todo Hours === */
+.todo-hours {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.35rem;
+}
+
+.hours-spent {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.hours-est {
+    color: var(--color-text-muted);
+}
+
 /* === Todo Board (Kanban) === */
 .todo-board {
     display: grid;

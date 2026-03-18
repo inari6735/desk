@@ -24,6 +24,42 @@
             {% endif %}
         </div>
 
+        {% set spent = project.totalSpentHours %}
+        {% set estimated = project.totalEstimatedHours %}
+        {% set budget = project.budgetHours %}
+        {% set remaining = project.remainingBudgetHours %}
+        {% set usagePercent = project.budgetUsagePercent %}
+
+        <div class="budget-bar">
+            <div class="budget-stats">
+                <div class="budget-stat">
+                    <span class="budget-label">Spent</span>
+                    <span class="budget-value">{{ spent|number_format(1) }}h</span>
+                </div>
+                <div class="budget-stat">
+                    <span class="budget-label">Estimated</span>
+                    <span class="budget-value">{{ estimated|number_format(1) }}h</span>
+                </div>
+                {% if budget %}
+                    <div class="budget-stat">
+                        <span class="budget-label">Budget</span>
+                        <span class="budget-value">{{ budget|number_format(1) }}h</span>
+                    </div>
+                    <div class="budget-stat">
+                        <span class="budget-label">Remaining</span>
+                        <span class="budget-value {{ remaining < 0 ? 'overdue' : '' }}">{{ remaining|number_format(1) }}h</span>
+                    </div>
+                {% endif %}
+            </div>
+            {% if budget %}
+                {% set percent = min(max(usagePercent, 0), 100) %}
+                <div class="progress-track">
+                    <div class="progress-fill {{ usagePercent > 90 ? 'progress-danger' : (usagePercent > 70 ? 'progress-warning' : '') }}" style="width: {{ percent }}%"></div>
+                </div>
+                <div class="budget-percent {{ usagePercent > 100 ? 'overdue' : '' }}">{{ usagePercent|number_format(0) }}% used</div>
+            {% endif %}
+        </div>
+
         <div class="todo-board">
             {% set statuses = {'todo': 'To Do', 'in_progress': 'In Progress', 'done': 'Done'} %}
             {% for statusValue, statusLabel in statuses %}
@@ -49,6 +85,16 @@
                                 </div>
                                 {% if todo.description %}
                                     <p class="todo-description">{{ todo.description|u.truncate(80, '...') }}</p>
+                                {% endif %}
+                                {% if todo.estimatedHours or todo.spentHours %}
+                                    <div class="todo-hours">
+                                        {% if todo.spentHours %}
+                                            <span class="hours-spent">{{ todo.spentHours|number_format(1) }}h spent</span>
+                                        {% endif %}
+                                        {% if todo.estimatedHours %}
+                                            <span class="hours-est">/ {{ todo.estimatedHours|number_format(1) }}h est.</span>
+                                        {% endif %}
+                                    </div>
                                 {% endif %}
                                 <div class="todo-meta">
                                     {% if todo.assignedTo %}

@@ -25,6 +25,9 @@ class Project
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 8, scale: 1, nullable: true)]
+    private ?string $budgetHours = null;
+
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
@@ -75,6 +78,56 @@ class Project
         $this->description = $description;
 
         return $this;
+    }
+
+    public function getBudgetHours(): ?float
+    {
+        return $this->budgetHours !== null ? (float) $this->budgetHours : null;
+    }
+
+    public function setBudgetHours(?float $budgetHours): static
+    {
+        $this->budgetHours = $budgetHours !== null ? (string) $budgetHours : null;
+
+        return $this;
+    }
+
+    public function getTotalEstimatedHours(): float
+    {
+        $total = 0.0;
+        foreach ($this->todos as $todo) {
+            $total += $todo->getEstimatedHours() ?? 0;
+        }
+
+        return $total;
+    }
+
+    public function getTotalSpentHours(): float
+    {
+        $total = 0.0;
+        foreach ($this->todos as $todo) {
+            $total += $todo->getSpentHours() ?? 0;
+        }
+
+        return $total;
+    }
+
+    public function getRemainingBudgetHours(): ?float
+    {
+        if ($this->budgetHours === null) {
+            return null;
+        }
+
+        return (float) $this->budgetHours - $this->getTotalSpentHours();
+    }
+
+    public function getBudgetUsagePercent(): ?float
+    {
+        if ($this->budgetHours === null || (float) $this->budgetHours === 0.0) {
+            return null;
+        }
+
+        return ($this->getTotalSpentHours() / (float) $this->budgetHours) * 100;
     }
 
     public function getCreatedAt(): \DateTimeImmutable

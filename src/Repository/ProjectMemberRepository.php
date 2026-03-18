@@ -28,15 +28,17 @@ class ProjectMemberRepository extends ServiceEntityRepository
      */
     public function findProjectsForUser(User $user, string $permission): array
     {
-        return $this->createQueryBuilder('pm')
-            ->select('p')
-            ->join('pm.project', 'p')
-            ->where('pm.user = :user')
-            ->andWhere('pm.permissions LIKE :permission')
-            ->setParameter('user', $user)
-            ->setParameter('permission', '%"'.$permission.'"%')
-            ->orderBy('p.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $memberships = $this->findBy(['user' => $user]);
+
+        $projects = [];
+        foreach ($memberships as $membership) {
+            if ($membership->hasPermission($permission)) {
+                $projects[] = $membership->getProject();
+            }
+        }
+
+        usort($projects, fn (Project $a, Project $b) => $b->getCreatedAt() <=> $a->getCreatedAt());
+
+        return $projects;
     }
 }

@@ -50,6 +50,24 @@
                 </div>
             {% endfor %}
         </div>
+
+        {% if project.members|length > 0 %}
+            <div class="project-members">
+                <h2>Members</h2>
+                <div class="members-list">
+                    {% for member in project.members %}
+                        <div class="member-item">
+                            <span class="member-email">{{ member.user.email }}</span>
+                            <div class="member-permissions">
+                                {% for perm in member.permissions %}
+                                    <span class="badge badge-sm">{{ perm }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </main>
 </div>
 {% endblock %}

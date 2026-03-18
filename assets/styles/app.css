@@ -379,6 +379,52 @@ a:hover {
     color: var(--color-primary);
 }
 
+.badge-sm {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.65rem;
+}
+
+/* === Project Members === */
+.project-members {
+    margin-top: 2.5rem;
+}
+
+.project-members h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.members-list {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.member-item:last-child {
+    border-bottom: none;
+}
+
+.member-email {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.member-permissions {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
 /* === Todo Board (Kanban) === */
 .todo-board {
     display: grid;

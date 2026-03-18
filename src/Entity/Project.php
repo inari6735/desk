@@ -32,10 +32,15 @@ class Project
     #[ORM\OneToMany(targetEntity: Todo::class, mappedBy: 'project')]
     private Collection $todos;
 
+    /** @var Collection<int, ProjectMember> */
+    #[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'project', orphanRemoval: true)]
+    private Collection $members;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->todos = new ArrayCollection();
+        $this->members = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -98,6 +103,33 @@ class Project
         if ($this->todos->removeElement($todo)) {
             if ($todo->getProject() === $this) {
                 $todo->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /** @return Collection<int, ProjectMember> */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(ProjectMember $member): static
+    {
+        if (!$this->members->contains($member)) {
+            $this->members->add($member);
+            $member->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMember(ProjectMember $member): static
+    {
+        if ($this->members->removeElement($member)) {
+            if ($member->getProject() === $this) {
+                $member->setProject(null);
             }
         }
 

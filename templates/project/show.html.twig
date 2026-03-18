@@ -60,6 +60,31 @@
             {% endif %}
         </div>
 
+        {% set overrunTodos = project.todos|filter(t => t.estimatedHours and t.spentHours and t.spentHours > t.estimatedHours) %}
+        {% if overrunTodos|length > 0 %}
+            <div class="overrun-panel">
+                <div class="overrun-header">
+                    <h2>Overrun Tasks</h2>
+                    <span class="overrun-count">{{ overrunTodos|length }}</span>
+                </div>
+                <div class="overrun-list">
+                    {% for todo in overrunTodos %}
+                        {% set overrunHours = todo.spentHours - todo.estimatedHours %}
+                        {% set overrunPct = ((todo.spentHours / todo.estimatedHours) * 100 - 100) %}
+                        <a href="{{ path('app_todo_show', {id: todo.id}) }}" class="overrun-item">
+                            <div class="overrun-item-info">
+                                <span class="overrun-item-title">{{ todo.title }}</span>
+                                <span class="overrun-item-hours">{{ todo.spentHours|number_format(1) }}h / {{ todo.estimatedHours|number_format(1) }}h est.</span>
+                            </div>
+                            <div class="overrun-item-indicator">
+                                <span class="overrun-badge">+{{ overrunHours|number_format(1) }}h ({{ overrunPct|number_format(0) }}%)</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
         <div class="todo-board">
             {% set statuses = {'todo': 'To Do', 'in_progress': 'In Progress', 'done': 'Done'} %}
             {% for statusValue, statusLabel in statuses %}

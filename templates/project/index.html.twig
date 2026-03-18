@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container">
+        <div class="page-header">
+            <h1>Projects</h1>
+        </div>
+
+        {% if projects is empty %}
+            <div class="empty-state">
+                <p>No projects yet.</p>
+            </div>
+        {% else %}
+            <div class="card-grid">
+                {% for project in projects %}
+                    <a href="{{ path('app_project_show', {id: project.id}) }}" class="project-card">
+                        <h2>{{ project.name }}</h2>
+                        {% if project.description %}
+                            <p class="project-description">{{ project.description|u.truncate(120, '...') }}</p>
+                        {% endif %}
+                        <div class="project-meta">
+                            <span class="badge">{{ project.todos|length }} todo{{ project.todos|length != 1 ? 's' : '' }}</span>
+                            <span class="meta-date">{{ project.createdAt|date('M d, Y') }}</span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

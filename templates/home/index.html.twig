@@ -4,22 +4,23 @@
 
 {% block body %}
 <div class="home-page">
-    <nav class="navbar">
-        <a href="{{ path('app_home') }}" class="navbar-brand">Stronka</a>
-        <div class="navbar-links">
-            {% if app.user %}
-                <span class="navbar-user">{{ app.user.email }}</span>
-                <a href="{{ path('app_logout') }}" class="btn btn-outline">Sign out</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="btn btn-outline">Sign in</a>
-                <a href="{{ path('app_register') }}" class="btn btn-primary btn-sm">Create account</a>
-            {% endif %}
-        </div>
-    </nav>
+    {% include '_navbar.html.twig' %}
 
     <main class="home-content">
-        <h1>Welcome{% if app.user %}, {{ app.user.email }}{% endif %}!</h1>
-        <p>You're signed in and ready to go.</p>
+        {% if app.user %}
+            <h1>Welcome, {{ app.user.email }}</h1>
+            <p>Manage your projects and todos.</p>
+            <div class="home-actions">
+                <a href="{{ path('app_projects') }}" class="btn btn-primary">View Projects</a>
+                <a href="{{ path('app_todos') }}" class="btn btn-outline">My Todos</a>
+            </div>
+        {% else %}
+            <h1>Welcome to Stronka</h1>
+            <p>Sign in to manage your projects and todos.</p>
+            <div class="home-actions">
+                <a href="{{ path('app_login') }}" class="btn btn-primary">Sign in</a>
+            </div>
+        {% endif %}
     </main>
 </div>
 {% endblock %}

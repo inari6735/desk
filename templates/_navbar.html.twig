@@ -1,0 +1,18 @@
+<nav class="navbar">
+    <a href="{{ path('app_home') }}" class="navbar-brand">Stronka</a>
+    <div class="navbar-nav">
+        {% if app.user %}
+            <a href="{{ path('app_projects') }}" class="nav-link {{ app.request.attributes.get('_route') starts with 'app_project' ? 'active' : '' }}">Projects</a>
+            <a href="{{ path('app_todos') }}" class="nav-link {{ app.request.attributes.get('_route') == 'app_todos' ? 'active' : '' }}">My Todos</a>
+        {% endif %}
+    </div>
+    <div class="navbar-links">
+        {% if app.user %}
+            <span class="navbar-user">{{ app.user.email }}</span>
+            <a href="{{ path('app_logout') }}" class="btn btn-outline btn-sm">Sign out</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-outline btn-sm">Sign in</a>
+            <a href="{{ path('app_register') }}" class="btn btn-primary btn-sm">Create account</a>
+        {% endif %}
+    </div>
+</nav>

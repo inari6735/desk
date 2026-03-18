@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container">
+        <div class="page-header">
+            <div>
+                <a href="{{ path('app_projects') }}" class="back-link">&larr; Projects</a>
+                <h1>{{ project.name }}</h1>
+                {% if project.description %}
+                    <p class="page-description">{{ project.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="todo-board">
+            {% set statuses = {'todo': 'To Do', 'in_progress': 'In Progress', 'done': 'Done'} %}
+            {% for statusValue, statusLabel in statuses %}
+                <div class="todo-column">
+                    <h3 class="column-header column-{{ statusValue }}">
+                        {{ statusLabel }}
+                        <span class="column-count">{{ project.todos|filter(t => t.status.value == statusValue)|length }}</span>
+                    </h3>
+                    <div class="todo-list">
+                        {% for todo in project.todos|filter(t => t.status.value == statusValue) %}
+                            <div class="todo-card">
+                                <div class="todo-title">{{ todo.title }}</div>
+                                {% if todo.description %}
+                                    <p class="todo-description">{{ todo.description|u.truncate(80, '...') }}</p>
+                                {% endif %}
+                                <div class="todo-meta">
+                                    {% if todo.assignedTo %}
+                                        <span class="todo-assignee">{{ todo.assignedTo.email }}</span>
+                                    {% endif %}
+                                    {% if todo.dueDate %}
+                                        <span class="todo-due {{ todo.dueDate < date() and todo.status.value != 'done' ? 'overdue' : '' }}">
+                                            {{ todo.dueDate|date('M d') }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="todo-empty">No items</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+{% endblock %}

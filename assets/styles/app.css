@@ -240,3 +240,317 @@ a:hover {
     color: var(--color-text-muted);
     font-size: 1.1rem;
 }
+
+.home-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+/* === Nav Links === */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.nav-link {
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: color 0.15s, background 0.15s;
+}
+
+.nav-link:hover {
+    color: var(--color-text);
+    background: var(--color-bg);
+    text-decoration: none;
+}
+
+.nav-link.active {
+    color: var(--color-primary);
+    background: rgba(79, 70, 229, 0.08);
+}
+
+/* === App Layout === */
+.app-layout {
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+/* === Page Header === */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.page-description {
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+}
+
+.back-link {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.back-link:hover {
+    color: var(--color-primary);
+}
+
+/* === Empty State === */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    border: 1px dashed var(--color-border);
+}
+
+/* === Project Cards Grid === */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+}
+
+.project-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    display: block;
+    color: var(--color-text);
+}
+
+.project-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
+    text-decoration: none;
+}
+
+.project-card h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.project-description {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.project-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+}
+
+.meta-date {
+    color: var(--color-text-muted);
+}
+
+/* === Badges === */
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--color-primary);
+}
+
+/* === Todo Board (Kanban) === */
+.todo-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.todo-column {
+    min-height: 200px;
+}
+
+.column-header {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+}
+
+.column-todo { color: var(--color-text-muted); }
+.column-in_progress { color: #b45309; background: #fffbeb; border-color: #fde68a; }
+.column-done { color: #15803d; background: #f0fdf4; border-color: #bbf7d0; }
+
+.column-count {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.08);
+}
+
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.todo-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.85rem;
+}
+
+.todo-card .todo-title {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.todo-card .todo-description {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.todo-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.todo-assignee {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.todo-empty {
+    text-align: center;
+    padding: 1.5rem 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+/* === Status Badges === */
+.status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-todo { background: #f1f5f9; color: #475569; }
+.status-in_progress { background: #fef3c7; color: #92400e; }
+.status-done { background: #dcfce7; color: #166534; }
+
+/* === Overdue === */
+.overdue {
+    color: var(--color-error-text);
+    font-weight: 500;
+}
+
+/* === Todo Table === */
+.todo-table {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.todo-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.todo-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.todo-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.9rem;
+    vertical-align: top;
+}
+
+.todo-table tr:last-child td {
+    border-bottom: none;
+}
+
+.todo-table .todo-title {
+    font-weight: 500;
+    display: block;
+}
+
+.todo-table .todo-description {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    display: block;
+    margin-top: 0.15rem;
+}
+
+.text-muted {
+    color: var(--color-text-muted);
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .todo-board {
+        grid-template-columns: 1fr;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .navbar-nav {
+        order: 3;
+        width: 100%;
+    }
+}

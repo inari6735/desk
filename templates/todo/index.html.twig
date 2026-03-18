@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Todos{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container">
+        <div class="page-header">
+            <h1>My Todos</h1>
+        </div>
+
+        {% if todos is empty %}
+            <div class="empty-state">
+                <p>No todos assigned to you.</p>
+            </div>
+        {% else %}
+            <div class="todo-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Project</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for todo in todos %}
+                            <tr>
+                                <td>
+                                    <span class="todo-title">{{ todo.title }}</span>
+                                    {% if todo.description %}
+                                        <span class="todo-description">{{ todo.description|u.truncate(60, '...') }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if todo.project %}
+                                        <a href="{{ path('app_project_show', {id: todo.project.id}) }}">{{ todo.project.name }}</a>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="status-badge status-{{ todo.status.value }}">{{ todo.status.label }}</span>
+                                </td>
+                                <td>
+                                    {% if todo.dueDate %}
+                                        <span class="{{ todo.dueDate < date() and todo.status.value != 'done' ? 'overdue' : '' }}">
+                                            {{ todo.dueDate|date('M d, Y') }}
+                                        </span>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

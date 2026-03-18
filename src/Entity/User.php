@@ -50,6 +50,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userRoles = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->email ?? '';
+    }
+
     public function getId(): ?Uuid
     {
         return $this->id;

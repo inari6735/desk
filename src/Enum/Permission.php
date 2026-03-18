@@ -17,6 +17,16 @@ enum Permission: string
     case CONTENT_EDIT = 'CONTENT_EDIT';
     case CONTENT_DELETE = 'CONTENT_DELETE';
 
+    // Projects
+    case PROJECT_CREATE = 'PROJECT_CREATE';
+    case PROJECT_EDIT = 'PROJECT_EDIT';
+    case PROJECT_DELETE = 'PROJECT_DELETE';
+
+    // Todos
+    case TODO_CREATE = 'TODO_CREATE';
+    case TODO_EDIT = 'TODO_EDIT';
+    case TODO_DELETE = 'TODO_DELETE';
+
     public function label(): string
     {
         return match ($this) {
@@ -27,6 +37,12 @@ enum Permission: string
             self::CONTENT_CREATE => 'Create content',
             self::CONTENT_EDIT => 'Edit content',
             self::CONTENT_DELETE => 'Delete content',
+            self::PROJECT_CREATE => 'Create projects',
+            self::PROJECT_EDIT => 'Edit projects',
+            self::PROJECT_DELETE => 'Delete projects',
+            self::TODO_CREATE => 'Create todos',
+            self::TODO_EDIT => 'Edit todos',
+            self::TODO_DELETE => 'Delete todos',
         };
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Position;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -42,6 +43,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 512, nullable: true)]
     private ?string $avatarUrl = null;
+
+    #[ORM\Column(length: 30, nullable: true, enumType: Position::class)]
+    private ?Position $position = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
@@ -149,6 +153,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatarUrl(?string $avatarUrl): static
     {
         $this->avatarUrl = $avatarUrl;
+
+        return $this;
+    }
+
+    public function getPosition(): ?Position
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?Position $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }

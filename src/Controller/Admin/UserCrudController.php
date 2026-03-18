@@ -3,13 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Enum\Position;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class UserCrudController extends AbstractCrudController
@@ -27,9 +27,13 @@ class UserCrudController extends AbstractCrudController
                 ->hideOnForm(),
             TextField::new('name'),
             EmailField::new('email'),
+            ChoiceField::new('position')
+                ->setChoices(Position::cases())
+                ->setRequired(false),
             ChoiceField::new('roles')
                 ->setChoices([
                     'User' => 'ROLE_USER',
+                    'Employee' => 'ROLE_EMPLOYEE',
                     'Admin' => 'ROLE_ADMIN',
                 ])
                 ->allowMultipleChoices()

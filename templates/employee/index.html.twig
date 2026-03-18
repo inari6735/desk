@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Team{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container">
+        <div class="page-header">
+            <h1>Team</h1>
+        </div>
+
+        <div class="filter-bar">
+            <a href="{{ path('app_team') }}" class="filter-chip {{ currentPosition is null ? 'active' : '' }}">All</a>
+            {% for pos in positions %}
+                <a href="{{ path('app_team', {position: pos.value}) }}" class="filter-chip {{ currentPosition == pos ? 'active' : '' }}" style="{{ currentPosition == pos ? '--chip-color: ' ~ pos.color : '' }}">
+                    {{ pos.label }}
+                </a>
+            {% endfor %}
+        </div>
+
+        {% if employees is empty %}
+            <div class="empty-state">
+                <p>No employees found{{ currentPosition ? ' for ' ~ currentPosition.label : '' }}.</p>
+            </div>
+        {% else %}
+            <div class="employee-grid">
+                {% for employee in employees %}
+                    <div class="employee-card">
+                        <div class="employee-avatar">
+                            {% if employee.avatarUrl %}
+                                <img src="{{ employee.avatarUrl }}" alt="" class="avatar avatar-lg" referrerpolicy="no-referrer">
+                            {% else %}
+                                <span class="avatar avatar-lg avatar-placeholder">{{ employee.displayName|first|upper }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="employee-info">
+                            <h3>{{ employee.displayName }}</h3>
+                            <p class="employee-email">{{ employee.email }}</p>
+                            {% if employee.position %}
+                                <span class="position-badge" style="--pos-color: {{ employee.position.color }}">{{ employee.position.label }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

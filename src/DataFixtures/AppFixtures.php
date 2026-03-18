@@ -9,6 +9,7 @@ use App\Entity\TimeEntry;
 use App\Entity\Todo;
 use App\Entity\User;
 use App\Enum\Permission;
+use App\Enum\Position;
 use App\Enum\ProjectPermission;
 use App\Enum\TodoStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -29,23 +30,41 @@ class AppFixtures extends Fixture
         $adminRole->setPermissions(array_map(fn (Permission $p) => $p->value, Permission::cases()));
         $manager->persist($adminRole);
 
-        $userRole = new Role();
-        $userRole->setName('User');
-        $userRole->setPermissions([]);
-        $manager->persist($userRole);
+        $employeeRole = new Role();
+        $employeeRole->setName('Employee');
+        $employeeRole->setPermissions([Permission::USER_VIEW->value]);
+        $manager->persist($employeeRole);
 
         // --- Users ---
-        $admin = $this->createUser($manager, 'admin@example.com', 'admin', 'Admin', ['ROLE_ADMIN']);
+        $admin = $this->createUser($manager, 'admin@example.com', 'admin', 'Admin', ['ROLE_ADMIN', 'ROLE_EMPLOYEE'], Position::CEO);
         $admin->addUserRole($adminRole);
 
-        $alice = $this->createUser($manager, 'alice@example.com', 'alice', 'Alice Johnson');
-        $alice->addUserRole($userRole);
+        $alice = $this->createUser($manager, 'alice@example.com', 'alice', 'Alice Johnson', ['ROLE_EMPLOYEE'], Position::FRONTEND);
+        $alice->addUserRole($employeeRole);
 
-        $bob = $this->createUser($manager, 'bob@example.com', 'bob', 'Bob Smith');
-        $bob->addUserRole($userRole);
+        $bob = $this->createUser($manager, 'bob@example.com', 'bob', 'Bob Smith', ['ROLE_EMPLOYEE'], Position::BACKEND);
+        $bob->addUserRole($employeeRole);
 
-        $carol = $this->createUser($manager, 'carol@example.com', 'carol', 'Carol Williams');
-        $carol->addUserRole($userRole);
+        $carol = $this->createUser($manager, 'carol@example.com', 'carol', 'Carol Williams', ['ROLE_EMPLOYEE'], Position::QA);
+        $carol->addUserRole($employeeRole);
+
+        $dave = $this->createUser($manager, 'dave@example.com', 'dave', 'Dave Brown', ['ROLE_EMPLOYEE'], Position::DEVOPS);
+        $dave->addUserRole($employeeRole);
+
+        $eve = $this->createUser($manager, 'eve@example.com', 'eve', 'Eve Davis', ['ROLE_EMPLOYEE'], Position::DESIGNER);
+        $eve->addUserRole($employeeRole);
+
+        $frank = $this->createUser($manager, 'frank@example.com', 'frank', 'Frank Miller', ['ROLE_EMPLOYEE'], Position::PM);
+        $frank->addUserRole($employeeRole);
+
+        $grace = $this->createUser($manager, 'grace@example.com', 'grace', 'Grace Lee', ['ROLE_EMPLOYEE'], Position::FULLSTACK);
+        $grace->addUserRole($employeeRole);
+
+        $hank = $this->createUser($manager, 'hank@example.com', 'hank', 'Hank Wilson', ['ROLE_EMPLOYEE'], Position::HR);
+        $hank->addUserRole($employeeRole);
+
+        $ivy = $this->createUser($manager, 'ivy@example.com', 'ivy', 'Ivy Taylor', ['ROLE_EMPLOYEE'], Position::MANAGER);
+        $ivy->addUserRole($employeeRole);
 
         // --- Projects ---
         $website = $this->createProject($manager, 'Website Redesign', 'Complete overhaul of the company website with new branding and responsive design.', 120);
@@ -139,13 +158,14 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createUser(ObjectManager $manager, string $email, string $password, string $name, array $roles = []): User
+    private function createUser(ObjectManager $manager, string $email, string $password, string $name, array $roles = [], ?Position $position = null): User
     {
         $user = new User();
         $user->setEmail($email);
         $user->setName($name);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setRoles($roles);
+        $user->setPosition($position);
         $manager->persist($user);
 
         return $user;

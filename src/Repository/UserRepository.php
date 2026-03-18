@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Enum\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -33,28 +34,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return list<User>
+     */
+    public function findEmployees(?Position $position = null): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $sql = 'SELECT id FROM "user" WHERE roles::text LIKE :role';
+        $params = ['role' => '%"ROLE_EMPLOYEE"%'];
+
+        if ($position) {
+            $sql .= ' AND position = :position';
+            $params['position'] = $position->value;
+        }
+
+        $sql .= ' ORDER BY name ASC';
+
+        $ids = $conn->executeQuery($sql, $params)->fetchFirstColumn();
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('u')
+            ->where('u.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('u.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

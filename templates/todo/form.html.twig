@@ -55,6 +55,12 @@
                 </div>
 
                 <div class="form-group">
+                    {{ form_label(form.taskGroups) }}
+                    {{ form_widget(form.taskGroups) }}
+                    {{ form_errors(form.taskGroups) }}
+                </div>
+
+                <div class="form-group">
                     {{ form_label(form.assignedTo) }}
                     {{ form_widget(form.assignedTo, {attr: {class: 'form-input'}}) }}
                     {{ form_errors(form.assignedTo) }}

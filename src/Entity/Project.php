@@ -39,11 +39,17 @@ class Project
     #[ORM\OneToMany(targetEntity: ProjectMember::class, mappedBy: 'project', orphanRemoval: true)]
     private Collection $members;
 
+    /** @var Collection<int, TaskGroup> */
+    #[ORM\OneToMany(targetEntity: TaskGroup::class, mappedBy: 'project', orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    private Collection $taskGroups;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->todos = new ArrayCollection();
         $this->members = new ArrayCollection();
+        $this->taskGroups = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -187,5 +193,11 @@ class Project
         }
 
         return $this;
+    }
+
+    /** @return Collection<int, TaskGroup> */
+    public function getTaskGroups(): Collection
+    {
+        return $this->taskGroups;
     }
 }

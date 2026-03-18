@@ -85,11 +85,28 @@
             </div>
         {% endif %}
 
-        {% set overrunTodos = project.todos|filter(t => t.estimatedHours and t.spentHours and t.spentHours > t.estimatedHours) %}
+        {# Group filter tabs #}
+        {% if project.taskGroups|length > 0 %}
+            <div class="group-tabs">
+                <a href="{{ path('app_project_show', {id: project.id}) }}" class="group-tab {{ currentGroup is null ? 'active' : '' }}">
+                    All
+                    <span class="group-tab-count">{{ project.todos|length }}</span>
+                </a>
+                {% for group in project.taskGroups %}
+                    <a href="{{ path('app_project_show', {id: project.id, group: group.id}) }}" class="group-tab {{ currentGroup and currentGroup.id == group.id ? 'active' : '' }}" {% if group.color %}style="--group-color: {{ group.color }}"{% endif %}>
+                        {% if group.color %}<span class="group-dot" style="background: {{ group.color }}"></span>{% endif %}
+                        {{ group.name }}
+                        <span class="group-tab-count">{{ group.todos|length }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% set overrunTodos = todos|filter(t => t.estimatedHours and t.spentHours and t.spentHours > t.estimatedHours) %}
         {% if overrunTodos|length > 0 %}
             <div class="overrun-panel">
                 <div class="overrun-header">
-                    <h2>Overrun Tasks</h2>
+                    <h2>Overrun Tasks{% if currentGroup %} — {{ currentGroup.name }}{% endif %}</h2>
                     <span class="overrun-count">{{ overrunTodos|length }}</span>
                 </div>
                 <div class="overrun-list">
@@ -116,10 +133,10 @@
                 <div class="todo-column">
                     <h3 class="column-header column-{{ statusValue }}">
                         {{ statusLabel }}
-                        <span class="column-count">{{ project.todos|filter(t => t.status.value == statusValue)|length }}</span>
+                        <span class="column-count">{{ todos|filter(t => t.status.value == statusValue)|length }}</span>
                     </h3>
                     <div class="todo-list">
-                        {% for todo in project.todos|filter(t => t.status.value == statusValue) %}
+                        {% for todo in todos|filter(t => t.status.value == statusValue) %}
                             <div class="todo-card">
                                 <div class="todo-card-header">
                                     <a href="{{ path('app_todo_show', {id: todo.id}) }}" class="todo-title-link">{{ todo.title }}</a>
@@ -133,6 +150,13 @@
                                         </div>
                                     {% endif %}
                                 </div>
+                                {% if todo.taskGroups|length > 0 %}
+                                    <div class="todo-groups">
+                                        {% for group in todo.taskGroups %}
+                                            <span class="group-badge" {% if group.color %}style="--group-color: {{ group.color }}"{% endif %}>{{ group.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                                 {% if todo.description %}
                                     <p class="todo-description">{{ todo.description|u.truncate(80, '...') }}</p>
                                 {% endif %}

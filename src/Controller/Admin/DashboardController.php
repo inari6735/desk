@@ -43,6 +43,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Projects');
         yield MenuItem::linkTo(ProjectCrudController::class, 'Projects', 'fa fa-folder');
         yield MenuItem::linkTo(ProjectMemberCrudController::class, 'Members', 'fa fa-user-plus');
+        yield MenuItem::linkTo(TaskGroupCrudController::class, 'Task Groups', 'fa fa-tags');
         yield MenuItem::linkTo(TodoCrudController::class, 'Todos', 'fa fa-check-square');
         yield MenuItem::section('Users');
         yield MenuItem::linkTo(UserCrudController::class, 'Users', 'fa fa-users');

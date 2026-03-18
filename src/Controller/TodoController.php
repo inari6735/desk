@@ -86,7 +86,7 @@ class TodoController extends AbstractController
         $todo = new Todo();
         $todo->setProject($project);
 
-        $form = $this->createForm(TodoFormType::class, $todo);
+        $form = $this->createForm(TodoFormType::class, $todo, ['project' => $project]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -111,7 +111,7 @@ class TodoController extends AbstractController
         $project = $todo->getProject();
         $this->denyAccessUnlessGranted(ProjectPermission::EDIT_TODO->value, $project);
 
-        $form = $this->createForm(TodoFormType::class, $todo);
+        $form = $this->createForm(TodoFormType::class, $todo, ['project' => $project]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

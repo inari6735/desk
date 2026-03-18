@@ -52,10 +52,15 @@ class Todo
     #[ORM\OrderBy(['date' => 'DESC'])]
     private Collection $timeEntries;
 
+    /** @var Collection<int, TaskGroup> */
+    #[ORM\ManyToMany(targetEntity: TaskGroup::class, mappedBy: 'todos')]
+    private Collection $taskGroups;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->timeEntries = new ArrayCollection();
+        $this->taskGroups = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -202,5 +207,30 @@ class Todo
         uasort($byUser, fn ($a, $b) => $b['hours'] <=> $a['hours']);
 
         return $byUser;
+    }
+
+    /** @return Collection<int, TaskGroup> */
+    public function getTaskGroups(): Collection
+    {
+        return $this->taskGroups;
+    }
+
+    public function addTaskGroup(TaskGroup $taskGroup): static
+    {
+        if (!$this->taskGroups->contains($taskGroup)) {
+            $this->taskGroups->add($taskGroup);
+            $taskGroup->addTodo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskGroup(TaskGroup $taskGroup): static
+    {
+        if ($this->taskGroups->removeElement($taskGroup)) {
+            $taskGroup->removeTodo($this);
+        }
+
+        return $this;
     }
 }

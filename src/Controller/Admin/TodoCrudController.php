@@ -50,6 +50,8 @@ class TodoCrudController extends AbstractCrudController
                 ->setNumDecimals(1),
             NumberField::new('spentHours', 'Spent (h)')
                 ->setNumDecimals(1),
+            AssociationField::new('taskGroups', 'Groups')
+                ->setFormTypeOption('by_reference', false),
             DateField::new('dueDate'),
             DateTimeField::new('createdAt')->hideOnForm(),
         ];

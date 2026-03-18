@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Project;
 use App\Entity\ProjectMember;
 use App\Entity\Role;
+use App\Entity\TaskGroup;
 use App\Entity\TimeEntry;
 use App\Entity\Todo;
 use App\Entity\User;
@@ -105,66 +106,107 @@ class AppFixtures extends Fixture
         $this->addMember($manager, $infra, $dave, $allPerms);
         $this->addMember($manager, $infra, $bob, $allPerms);
 
+        // ── Task Groups ──
+        // Website
+        $wsBacklog = $this->createGroup($manager, $website, 'Backlog', '#6f6f6f', 0);
+        $wsRelease1 = $this->createGroup($manager, $website, 'Release 1', '#0f62fe', 1);
+        $wsRelease2 = $this->createGroup($manager, $website, 'Release 2', '#8a3ffc', 2);
+
+        // API
+        $apiBacklog = $this->createGroup($manager, $api, 'Backlog', '#6f6f6f', 0);
+        $apiV1 = $this->createGroup($manager, $api, 'v1.0', '#198038', 1);
+        $apiV2 = $this->createGroup($manager, $api, 'v2.0', '#0072c3', 2);
+
+        // Mobile
+        $mobBacklog = $this->createGroup($manager, $mobile, 'Backlog', '#6f6f6f', 0);
+        $mobMvp = $this->createGroup($manager, $mobile, 'MVP', '#da1e28', 1);
+        $mobPostLaunch = $this->createGroup($manager, $mobile, 'Post-Launch', '#005d5d', 2);
+
+        // CRM
+        $crmBacklog = $this->createGroup($manager, $crm, 'Backlog', '#6f6f6f', 0);
+        $crmPhase1 = $this->createGroup($manager, $crm, 'Phase 1', '#0f62fe', 1);
+        $crmPhase2 = $this->createGroup($manager, $crm, 'Phase 2', '#ee5396', 2);
+
+        // Infra
+        $infraKanban = $this->createGroup($manager, $infra, 'Kanban', '#0f62fe', 0);
+        $infraQ1 = $this->createGroup($manager, $infra, 'Q1 2026', '#198038', 1);
+
         // ════════════════════════════════════════════════════
         // WEBSITE REDESIGN
         // ════════════════════════════════════════════════════
         $t = $this->createTodo($manager, $website, 'Design new homepage mockup', 'Create wireframes and high-fidelity mockups for the new landing page.', TodoStatus::DONE, $alice, '-30 days', 16, 18);
+        $wsRelease1->addTodo($t);
         $this->logTime($manager, $t, $alice, 8, '-32 days', 'Initial wireframes', '08:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $alice, 6, '-31 days', 'High-fidelity mockups', '09:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $admin, 2, '-30 days', 'Stakeholder review', '10:00', null, ActionType::MEETINGS);
         $this->logTime($manager, $t, $eve, 2, '-30 days', 'Visual polish', '14:00', null, ActionType::DEVELOPMENT);
 
         $t = $this->createTodo($manager, $website, 'Implement responsive navbar', null, TodoStatus::DONE, $bob, '-20 days', 8, 6);
+        $wsRelease1->addTodo($t);
         $this->logTime($manager, $t, $bob, 4, '-22 days', 'HTML/CSS structure', '09:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $bob, 2, '-21 days', 'Mobile breakpoints', '14:00', null, ActionType::TESTING);
 
         $t = $this->createTodo($manager, $website, 'Build hero section', 'Implement animated hero with CTA buttons.', TodoStatus::IN_PROGRESS, $alice, '+3 days', 12, 7);
+        $wsRelease1->addTodo($t);
         $this->logTime($manager, $t, $alice, 3, '-5 days', 'Layout and animations', '09:30', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $alice, 2, '-4 days', 'CTA buttons and responsive', '10:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $admin, 2, '-3 days', 'Reviewed hero copy and layout', '14:00', null, ActionType::PLANNING);
 
         $t = $this->createTodo($manager, $website, 'Footer component', null, TodoStatus::IN_PROGRESS, $bob, '+5 days', 6, 2);
+        $wsRelease1->addTodo($t);
         $this->logTime($manager, $t, $bob, 2, '-2 days', 'Basic structure', '08:30', null, ActionType::DEVELOPMENT);
 
-        $this->createTodo($manager, $website, 'Contact form', 'Form with email validation and reCAPTCHA.', TodoStatus::TODO, $alice, '+10 days', 10, 0);
-        $this->createTodo($manager, $website, 'SEO optimization', null, TodoStatus::TODO, null, '+14 days', 8, 0);
-        $this->createTodo($manager, $website, 'Performance audit', 'Run Lighthouse and fix issues.', TodoStatus::TODO, $bob, '+20 days', 12, 0);
+        $t = $this->createTodo($manager, $website, 'Contact form', 'Form with email validation and reCAPTCHA.', TodoStatus::TODO, $alice, '+10 days', 10, 0);
+        $wsRelease2->addTodo($t);
+        $t = $this->createTodo($manager, $website, 'SEO optimization', null, TodoStatus::TODO, null, '+14 days', 8, 0);
+        $wsRelease2->addTodo($t); $wsBacklog->addTodo($t);
+        $t = $this->createTodo($manager, $website, 'Performance audit', 'Run Lighthouse and fix issues.', TodoStatus::TODO, $bob, '+20 days', 12, 0);
+        $wsRelease2->addTodo($t);
 
         // ════════════════════════════════════════════════════
         // API PLATFORM
         // ════════════════════════════════════════════════════
         $t = $this->createTodo($manager, $api, 'Set up API skeleton', null, TodoStatus::DONE, $bob, '-40 days', 8, 8);
+        $apiV1->addTodo($t);
         $this->logTime($manager, $t, $bob, 5, '-42 days', 'Project setup and config', '08:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $bob, 3, '-41 days', 'Base controller and routing', '09:00', null, ActionType::DEVELOPMENT);
 
         $t = $this->createTodo($manager, $api, 'User authentication endpoints', 'JWT-based auth with refresh tokens.', TodoStatus::DONE, $bob, '-25 days', 24, 28);
+        $apiV1->addTodo($t);
         $this->logTime($manager, $t, $bob, 8, '-35 days', 'JWT setup and login', '08:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $bob, 8, '-34 days', 'Refresh tokens', '08:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $carol, 6, '-33 days', 'Registration and validation testing', '09:00', null, ActionType::TESTING);
         $this->logTime($manager, $t, $bob, 6, '-32 days', 'Edge case fixes', '10:00', null, ActionType::BUG_FIXING);
 
         $t = $this->createTodo($manager, $api, 'CRUD for products', null, TodoStatus::IN_PROGRESS, $grace, '+2 days', 16, 10);
+        $apiV1->addTodo($t);
         $this->logTime($manager, $t, $grace, 4, '-6 days', 'Entity and endpoints', '08:30', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $grace, 3, '-5 days', 'Validation logic', '09:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $carol, 3, '-4 days', 'Endpoint testing', '13:00', null, ActionType::TESTING);
 
         $t = $this->createTodo($manager, $api, 'Rate limiting middleware', 'Implement token-bucket rate limiter.', TodoStatus::TODO, $bob, '+7 days', 12, 0);
+        $apiV2->addTodo($t);
         $t = $this->createTodo($manager, $api, 'API documentation', 'Generate OpenAPI spec with Swagger UI.', TodoStatus::TODO, $alice, '+12 days', 16, 0);
+        $apiV1->addTodo($t); $apiBacklog->addTodo($t);
         $t = $this->createTodo($manager, $api, 'Integration tests', null, TodoStatus::TODO, $carol, '+15 days', 20, 0);
+        $apiV2->addTodo($t);
 
         $t = $this->createTodo($manager, $api, 'Pagination and filtering', 'Add cursor-based pagination and filter params to all list endpoints.', TodoStatus::IN_PROGRESS, $bob, '+5 days', 10, 4);
+        $apiV1->addTodo($t);
         $this->logTime($manager, $t, $bob, 4, '-3 days', 'Cursor pagination implementation', '08:00', null, ActionType::DEVELOPMENT);
 
         // ════════════════════════════════════════════════════
         // MOBILE APP
         // ════════════════════════════════════════════════════
         $t = $this->createTodo($manager, $mobile, 'Project setup and CI', 'Set up React Native project with GitHub Actions.', TodoStatus::DONE, $admin, '-45 days', 12, 14);
+        $mobMvp->addTodo($t);
         $this->logTime($manager, $t, $admin, 6, '-47 days', 'React Native init and deps', '08:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $admin, 4, '-46 days', 'CI pipeline config', '09:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $admin, 2, '-45 days', 'Fix build issues on CI', '10:00', null, ActionType::BUG_FIXING);
         $this->logTime($manager, $t, $dave, 2, '-45 days', 'Docker build optimization', '14:00', null, ActionType::DEVOPS);
 
         $t = $this->createTodo($manager, $mobile, 'Login screen', 'Implement login form with biometric auth support.', TodoStatus::DONE, $admin, '-20 days', 16, 18);
+        $mobMvp->addTodo($t);
         $this->logTime($manager, $t, $admin, 5, '-25 days', 'UI layout and form', '08:30', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $admin, 3, '-24 days', 'API integration', '14:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $admin, 4, '-23 days', 'Biometric auth research', '09:00', null, ActionType::RESEARCH);
@@ -172,23 +214,29 @@ class AppFixtures extends Fixture
         $this->logTime($manager, $t, $admin, 3, '-21 days', 'Testing on devices', '13:00', null, ActionType::TESTING);
 
         $t = $this->createTodo($manager, $mobile, 'Dashboard screen', 'Main screen showing user stats and recent activity.', TodoStatus::IN_PROGRESS, $grace, '+8 days', 24, 8);
+        $mobMvp->addTodo($t);
         $this->logTime($manager, $t, $grace, 4, '-4 days', 'Widget layout system', '08:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $grace, 4, '-3 days', 'Stats cards and charts', '09:00', null, ActionType::DEVELOPMENT);
 
         $t = $this->createTodo($manager, $mobile, 'Push notifications', 'FCM integration for iOS and Android.', TodoStatus::TODO, $admin, '+18 days', 20, 0);
+        $mobPostLaunch->addTodo($t);
         $t = $this->createTodo($manager, $mobile, 'Offline mode', 'Local storage sync for offline-first usage.', TodoStatus::TODO, $grace, '+25 days', 30, 0);
+        $mobPostLaunch->addTodo($t); $mobBacklog->addTodo($t);
         $t = $this->createTodo($manager, $mobile, 'App store submission', 'Prepare screenshots, descriptions, submit to App Store and Play Store.', TodoStatus::TODO, $admin, '+35 days', 8, 0);
+        $mobMvp->addTodo($t);
 
         // ════════════════════════════════════════════════════
         // CRM SYSTEM
         // ════════════════════════════════════════════════════
         $t = $this->createTodo($manager, $crm, 'Database schema design', 'Design the ER diagram and initial migration for contacts, companies, deals.', TodoStatus::DONE, $bob, '-35 days', 12, 14);
+        $crmPhase1->addTodo($t);
         $this->logTime($manager, $t, $bob, 4, '-38 days', 'ER diagram draft', '08:00', null, ActionType::PLANNING);
         $this->logTime($manager, $t, $bob, 4, '-37 days', 'Schema review with team', '09:00', null, ActionType::MEETINGS);
         $this->logTime($manager, $t, $admin, 2, '-37 days', 'Architecture review', '14:00', null, ActionType::PLANNING);
         $this->logTime($manager, $t, $bob, 4, '-36 days', 'Migrations and seed data', '08:00', null, ActionType::DEVELOPMENT);
 
         $t = $this->createTodo($manager, $crm, 'Contact management CRUD', 'Full CRUD for contacts with search and pagination.', TodoStatus::DONE, $grace, '-15 days', 20, 22);
+        $crmPhase1->addTodo($t);
         $this->logTime($manager, $t, $grace, 6, '-20 days', 'Entity and repository', '08:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $grace, 6, '-19 days', 'Controller and forms', '08:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $grace, 4, '-18 days', 'Search and pagination', '09:00', null, ActionType::DEVELOPMENT);
@@ -196,38 +244,48 @@ class AppFixtures extends Fixture
         $this->logTime($manager, $t, $grace, 2, '-16 days', 'Bug fixes from QA', '14:00', null, ActionType::BUG_FIXING);
 
         $t = $this->createTodo($manager, $crm, 'Deal pipeline view', 'Kanban-style deal pipeline with drag and drop.', TodoStatus::IN_PROGRESS, $bob, '+5 days', 24, 10);
+        $crmPhase1->addTodo($t);
         $this->logTime($manager, $t, $bob, 4, '-7 days', 'Kanban layout structure', '08:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $bob, 3, '-6 days', 'Drag and drop JS', '09:00', null, ActionType::DEVELOPMENT);
         $this->logTime($manager, $t, $admin, 3, '-5 days', 'Planning session — pipeline stages', '10:00', null, ActionType::PLANNING);
 
         $t = $this->createTodo($manager, $crm, 'Email integration', 'Connect with Gmail/Outlook to log emails per contact.', TodoStatus::IN_PROGRESS, $bob, '+12 days', 30, 6);
+        $crmPhase2->addTodo($t);
         $this->logTime($manager, $t, $bob, 3, '-4 days', 'OAuth research for Gmail', '08:00', null, ActionType::RESEARCH);
         $this->logTime($manager, $t, $bob, 3, '-3 days', 'Gmail API integration', '09:00', null, ActionType::DEVELOPMENT);
 
-        $this->createTodo($manager, $crm, 'Reporting dashboard', 'Charts and KPIs for sales performance.', TodoStatus::TODO, $frank, '+20 days', 20, 0);
-        $this->createTodo($manager, $crm, 'Import/Export CSV', 'Bulk import and export contacts and deals.', TodoStatus::TODO, $grace, '+15 days', 12, 0);
-        $this->createTodo($manager, $crm, 'Activity timeline', 'Per-contact timeline of all interactions.', TodoStatus::TODO, $bob, '+18 days', 16, 0);
+        $t = $this->createTodo($manager, $crm, 'Reporting dashboard', 'Charts and KPIs for sales performance.', TodoStatus::TODO, $frank, '+20 days', 20, 0);
+        $crmPhase2->addTodo($t);
+        $t = $this->createTodo($manager, $crm, 'Import/Export CSV', 'Bulk import and export contacts and deals.', TodoStatus::TODO, $grace, '+15 days', 12, 0);
+        $crmPhase2->addTodo($t); $crmBacklog->addTodo($t);
+        $t = $this->createTodo($manager, $crm, 'Activity timeline', 'Per-contact timeline of all interactions.', TodoStatus::TODO, $bob, '+18 days', 16, 0);
+        $crmPhase2->addTodo($t);
 
         // ════════════════════════════════════════════════════
         // INFRASTRUCTURE
         // ════════════════════════════════════════════════════
         $t = $this->createTodo($manager, $infra, 'Kubernetes cluster setup', 'Provision k8s cluster on AWS EKS with Terraform.', TodoStatus::DONE, $dave, '-30 days', 20, 22);
+        $infraQ1->addTodo($t);
         $this->logTime($manager, $t, $dave, 8, '-35 days', 'Terraform modules for EKS', '08:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $dave, 6, '-34 days', 'Networking and security groups', '08:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $dave, 4, '-33 days', 'Node pools and autoscaling', '09:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $dave, 4, '-32 days', 'Testing and documentation', '08:00', null, ActionType::DOCUMENTATION);
 
         $t = $this->createTodo($manager, $infra, 'CI/CD pipeline', 'GitHub Actions pipelines for all services.', TodoStatus::DONE, $dave, '-15 days', 16, 14);
+        $infraQ1->addTodo($t);
         $this->logTime($manager, $t, $dave, 6, '-20 days', 'Build and test workflows', '08:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $dave, 4, '-19 days', 'Deploy workflows', '09:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $dave, 4, '-18 days', 'Environment secrets and staging', '08:00', null, ActionType::DEVOPS);
 
         $t = $this->createTodo($manager, $infra, 'Monitoring and alerting', 'Set up Prometheus, Grafana, PagerDuty integration.', TodoStatus::IN_PROGRESS, $dave, '+5 days', 18, 8);
+        $infraKanban->addTodo($t);
         $this->logTime($manager, $t, $dave, 4, '-5 days', 'Prometheus setup', '08:00', null, ActionType::DEVOPS);
         $this->logTime($manager, $t, $dave, 4, '-4 days', 'Grafana dashboards', '09:00', null, ActionType::DEVOPS);
 
-        $this->createTodo($manager, $infra, 'Database backup automation', 'Automated daily backups with point-in-time recovery.', TodoStatus::TODO, $dave, '+10 days', 10, 0);
-        $this->createTodo($manager, $infra, 'Cost optimization', 'Review and optimize AWS spend.', TodoStatus::TODO, $admin, '+20 days', 8, 0);
+        $t = $this->createTodo($manager, $infra, 'Database backup automation', 'Automated daily backups with point-in-time recovery.', TodoStatus::TODO, $dave, '+10 days', 10, 0);
+        $infraKanban->addTodo($t);
+        $t = $this->createTodo($manager, $infra, 'Cost optimization', 'Review and optimize AWS spend.', TodoStatus::TODO, $admin, '+20 days', 8, 0);
+        $infraKanban->addTodo($t);
 
         // ════════════════════════════════════════════════════
         // ADMIN CURRENT MONTH SESSION LOGS (dense)
@@ -434,6 +492,18 @@ class AppFixtures extends Fixture
         $manager->persist($todo);
 
         return $todo;
+    }
+
+    private function createGroup(ObjectManager $manager, Project $project, string $name, string $color, int $position): TaskGroup
+    {
+        $group = new TaskGroup();
+        $group->setName($name);
+        $group->setProject($project);
+        $group->setColor($color);
+        $group->setPosition($position);
+        $manager->persist($group);
+
+        return $group;
     }
 
     private function logTime(ObjectManager $manager, Todo $todo, User $user, float $hours, string $dateOffset, ?string $note = null, string $startTime = '09:00', ?string $endTime = null, ?ActionType $actionType = null): void

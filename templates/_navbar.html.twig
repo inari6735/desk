@@ -10,14 +10,14 @@
     </div>
     <div class="navbar-links">
         {% if app.user %}
-            <div class="navbar-user">
+            <a href="{{ path('app_settings') }}" class="navbar-user">
                 {% if app.user.avatarUrl %}
                     <img src="{{ app.user.avatarUrl }}" alt="" class="avatar avatar-sm" referrerpolicy="no-referrer">
                 {% else %}
                     <span class="avatar avatar-sm avatar-placeholder">{{ app.user.displayName|first|upper }}</span>
                 {% endif %}
                 <span>{{ app.user.displayName }}</span>
-            </div>
+            </a>
             <a href="{{ path('app_logout') }}" class="btn btn-outline btn-sm">Sign out</a>
         {% else %}
             <a href="{{ path('app_login') }}" class="btn btn-outline btn-sm">Sign in</a>

@@ -51,6 +51,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $employedSince = null;
 
+    #[ORM\Column]
+    private bool $darkMode = false;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
 
@@ -201,6 +204,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $parts ? implode(', ', $parts) : 'Less than a month';
+    }
+
+    public function isDarkMode(): bool
+    {
+        return $this->darkMode;
+    }
+
+    public function setDarkMode(bool $darkMode): static
+    {
+        $this->darkMode = $darkMode;
+
+        return $this;
     }
 
     public function getGoogleId(): ?string

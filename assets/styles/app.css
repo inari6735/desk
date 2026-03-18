@@ -55,6 +55,52 @@
     --shadow-lg: 0 6px 16px rgba(0,0,0,0.10);
 }
 
+/* === Carbon Dark (Gray 90) === */
+[data-theme="dark"] {
+    --cds-background: #262626;
+    --cds-layer-01: #393939;
+    --cds-layer-02: #525252;
+    --cds-layer-hover: #474747;
+    --cds-border-subtle: #525252;
+    --cds-border-strong: #8d8d8d;
+    --cds-text-primary: #f4f4f4;
+    --cds-text-secondary: #c6c6c6;
+    --cds-text-placeholder: #6f6f6f;
+    --cds-text-on-color: #ffffff;
+    --cds-text-helper: #a8a8a8;
+    --cds-interactive: #78a9ff;
+    --cds-interactive-hover: #a6c8ff;
+    --cds-focus: #78a9ff;
+    --cds-highlight: #0043ce;
+    --cds-support-error: #ff8389;
+    --cds-support-error-bg: #520408;
+    --cds-support-success: #42be65;
+    --cds-support-success-bg: #044317;
+    --cds-support-warning: #f1c21b;
+    --cds-support-warning-bg: #3a2e05;
+    --cds-support-warning-text: #f1c21b;
+    --color-error-border: #750e13;
+    --shadow: 0 2px 6px rgba(0,0,0,0.3);
+    --shadow-lg: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+[data-theme="dark"] .navbar {
+    background: #161616;
+}
+
+[data-theme="dark"] .auth-page {
+    background: #161616;
+}
+
+[data-theme="dark"] .notice-item {
+    color: var(--cds-support-warning-text);
+    background: rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] .notice-item:hover {
+    background: rgba(0,0,0,0.4);
+}
+
 body {
     font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--cds-background);
@@ -285,6 +331,12 @@ a:hover {
     gap: var(--cds-spacing-03);
     font-size: 0.75rem;
     color: #c6c6c6;
+    text-decoration: none;
+}
+
+.navbar-user:hover {
+    color: var(--cds-text-on-color);
+    text-decoration: none;
 }
 
 .navbar-links .btn-outline {
@@ -1104,6 +1156,101 @@ a.employee-card:hover {
 }
 
 .session-grand-total strong { color: var(--cds-text-primary); font-size: 1rem; font-family: 'IBM Plex Mono', monospace; }
+
+/* === Settings === */
+.settings-section {
+    background: var(--cds-layer-01);
+    padding: var(--cds-spacing-06);
+    margin-bottom: var(--cds-spacing-05);
+}
+
+.settings-section h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--cds-spacing-05);
+}
+
+.settings-profile {
+    display: flex;
+    align-items: center;
+}
+
+.settings-profile .member-info {
+    gap: var(--cds-spacing-05);
+}
+
+.settings-profile h2 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 0.125rem;
+}
+
+.settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cds-spacing-05);
+}
+
+.settings-row-info strong {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 0.0625rem;
+}
+
+.settings-row-info p {
+    font-size: 0.75rem;
+}
+
+/* Toggle Switch */
+.toggle {
+    position: relative;
+    width: 48px;
+    height: 24px;
+    background: var(--cds-border-strong);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.toggle-on {
+    background: var(--cds-interactive);
+}
+
+.toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: var(--cds-text-on-color);
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.toggle-on .toggle-knob {
+    transform: translateX(24px);
+}
+
+/* Nav Settings Icon */
+.nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    color: #c6c6c6;
+    font-size: 1rem;
+    transition: color 0.1s;
+}
+
+.nav-icon:hover {
+    color: var(--cds-text-on-color);
+    text-decoration: none;
+}
 
 /* === Employee Profile === */
 .profile-header {

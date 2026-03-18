@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container container-sm">
+        {% for message in app.flashes('success') %}
+            <div class="flash flash-success">{{ message }}</div>
+        {% endfor %}
+
+        <div class="page-header">
+            <h1>Settings</h1>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-profile">
+                <div class="member-info">
+                    {% if app.user.avatarUrl %}
+                        <img src="{{ app.user.avatarUrl }}" alt="" class="avatar avatar-lg" referrerpolicy="no-referrer">
+                    {% else %}
+                        <span class="avatar avatar-lg avatar-placeholder">{{ app.user.displayName|first|upper }}</span>
+                    {% endif %}
+                    <div>
+                        <h2>{{ app.user.displayName }}</h2>
+                        <p class="text-muted">{{ app.user.email }}</p>
+                        {% if app.user.position %}
+                            <span class="position-badge" style="--pos-color: {{ app.user.position.color }}">{{ app.user.position.label }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Appearance</h3>
+            <div class="settings-row">
+                <div class="settings-row-info">
+                    <strong>Dark mode</strong>
+                    <p class="text-muted">Switch to a darker color scheme that's easier on the eyes.</p>
+                </div>
+                <form method="post" action="{{ path('app_settings_toggle_dark_mode') }}" data-turbo="false">
+                    <input type="hidden" name="_token" value="{{ csrf_token('toggle-dark-mode') }}">
+                    <button type="submit" class="toggle {{ app.user.darkMode ? 'toggle-on' : '' }}">
+                        <span class="toggle-knob"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

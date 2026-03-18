@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -38,6 +40,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
 
+    /** @var Collection<int, Role> */
+    #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'users')]
+    #[ORM\JoinTable(name: 'user_role')]
+    private Collection $userRoles;
+
+    public function __construct()
+    {
+        $this->userRoles = new ArrayCollection();
+    }
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -71,7 +83,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -112,6 +123,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->googleId = $googleId;
 
         return $this;
+    }
+
+    /** @return Collection<int, Role> */
+    public function getUserRoles(): Collection
+    {
+        return $this->userRoles;
+    }
+
+    public function addUserRole(Role $role): static
+    {
+        if (!$this->userRoles->contains($role)) {
+            $this->userRoles->add($role);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRole(Role $role): static
+    {
+        $this->userRoles->removeElement($role);
+
+        return $this;
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        foreach ($this->userRoles as $role) {
+            if ($role->hasPermission($permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function getAllPermissions(): array
+    {
+        $permissions = [];
+        foreach ($this->userRoles as $role) {
+            $permissions = array_merge($permissions, $role->getPermissions());
+        }
+
+        return array_values(array_unique($permissions));
     }
 
     /**

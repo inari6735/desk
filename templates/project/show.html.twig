@@ -107,6 +107,53 @@
             </div>
         {% endif %}
 
+        {% if currentGroup %}
+            {% set groupEstimated = 0 %}
+            {% set groupSpent = 0 %}
+            {% set groupTodoCount = todos|length %}
+            {% set groupDoneCount = todos|filter(t => t.status.value == 'done')|length %}
+            {% for t in todos %}
+                {% set groupEstimated = groupEstimated + (t.estimatedHours ?? 0) %}
+                {% set groupSpent = groupSpent + (t.spentHours ?? 0) %}
+            {% endfor %}
+            <div class="group-summary">
+                <div class="group-summary-title">
+                    {% if currentGroup.color %}<span class="group-dot" style="background: {{ currentGroup.color }}"></span>{% endif %}
+                    <h3>{{ currentGroup.name }}</h3>
+                </div>
+                <div class="group-summary-stats">
+                    <div class="group-summary-stat">
+                        <span class="group-summary-value">{{ groupTodoCount }}</span>
+                        <span class="group-summary-label">Tasks</span>
+                    </div>
+                    <div class="group-summary-stat">
+                        <span class="group-summary-value">{{ groupDoneCount }}</span>
+                        <span class="group-summary-label">Done</span>
+                    </div>
+                    <div class="group-summary-stat">
+                        <span class="group-summary-value">{{ groupEstimated|number_format(1) }}h</span>
+                        <span class="group-summary-label">Estimated</span>
+                    </div>
+                    <div class="group-summary-stat">
+                        <span class="group-summary-value">{{ groupSpent|number_format(1) }}h</span>
+                        <span class="group-summary-label">Spent</span>
+                    </div>
+                    {% if groupEstimated > 0 %}
+                        <div class="group-summary-stat">
+                            <span class="group-summary-value {{ groupSpent > groupEstimated ? 'overdue' : '' }}">{{ ((groupSpent / groupEstimated) * 100)|number_format(0) }}%</span>
+                            <span class="group-summary-label">Used</span>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if groupEstimated > 0 %}
+                    {% set groupPct = min((groupSpent / groupEstimated) * 100, 100) %}
+                    <div class="progress-track" style="margin-top: var(--cds-spacing-03)">
+                        <div class="progress-fill {{ (groupSpent / groupEstimated) * 100 > 90 ? 'progress-danger' : ((groupSpent / groupEstimated) * 100 > 70 ? 'progress-warning' : '') }}" style="width: {{ groupPct }}%"></div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
         {% set overrunTodos = todos|filter(t => t.estimatedHours and t.spentHours and t.spentHours > t.estimatedHours) %}
         {% if overrunTodos|length > 0 %}
             <div class="overrun-panel">

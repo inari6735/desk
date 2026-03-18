@@ -787,6 +787,93 @@ a:hover {
 .progress-warning { background: var(--cds-support-warning); }
 .progress-danger { background: var(--cds-support-error); }
 
+/* === Action Type Badge === */
+.action-badge {
+    display: inline-block;
+    padding: 0.0625rem 0.4rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    background: color-mix(in srgb, var(--action-color) 15%, transparent);
+    color: var(--action-color);
+}
+
+.session-detail-top {
+    display: flex;
+    align-items: center;
+    gap: var(--cds-spacing-03);
+    margin-bottom: 0.0625rem;
+}
+
+/* === Action Breakdown === */
+.action-breakdown {
+    background: var(--cds-layer-01);
+    border-left: 3px solid var(--cds-interactive);
+    padding: var(--cds-spacing-05);
+    margin-bottom: var(--cds-spacing-06);
+}
+
+.action-breakdown h2 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cds-text-secondary);
+    margin-bottom: var(--cds-spacing-04);
+}
+
+.action-bar {
+    display: flex;
+    height: 8px;
+    overflow: hidden;
+    gap: 1px;
+    margin-bottom: var(--cds-spacing-04);
+}
+
+.action-bar-segment {
+    min-width: 4px;
+    transition: opacity 0.1s;
+}
+
+.action-bar-segment:hover {
+    opacity: 0.8;
+}
+
+.action-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.25rem var(--cds-spacing-06);
+}
+
+.action-legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--cds-spacing-03);
+    font-size: 0.75rem;
+}
+
+.action-legend-dot {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+}
+
+.action-legend-label {
+    flex: 1;
+    color: var(--cds-text-secondary);
+}
+
+.action-legend-value {
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.action-legend-pct {
+    color: var(--cds-text-secondary);
+    min-width: 2.5rem;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
 /* === Overrun Panel === */
 .overrun-panel {
     background: var(--cds-support-error-bg);

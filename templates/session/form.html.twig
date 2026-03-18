@@ -41,6 +41,12 @@
                 </div>
 
                 <div class="form-group">
+                    {{ form_label(form.actionType, 'Action Type') }}
+                    {{ form_widget(form.actionType, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(form.actionType) }}
+                </div>
+
+                <div class="form-group">
                     {{ form_label(form.note, 'Notes') }}
                     {{ form_widget(form.note, {attr: {class: 'form-input form-textarea'}}) }}
                     {{ form_errors(form.note) }}

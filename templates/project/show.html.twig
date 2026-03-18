@@ -60,6 +60,31 @@
             {% endif %}
         </div>
 
+        {% if actionBreakdown|length > 0 and totalTrackedHours > 0 %}
+            <div class="action-breakdown">
+                <h2>Time by Activity</h2>
+                <div class="action-bar">
+                    {% for item in actionBreakdown %}
+                        {% set pct = (item.hours / totalTrackedHours) * 100 %}
+                        {% if pct >= 1 %}
+                            <div class="action-bar-segment" style="width: {{ pct }}%; background: {{ item.type ? item.type.color : '#a8a8a8' }}" title="{{ item.type ? item.type.label : 'Uncategorized' }}: {{ item.hours|number_format(1) }}h ({{ pct|number_format(0) }}%)"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="action-legend">
+                    {% for item in actionBreakdown %}
+                        {% set pct = (item.hours / totalTrackedHours) * 100 %}
+                        <div class="action-legend-item">
+                            <span class="action-legend-dot" style="background: {{ item.type ? item.type.color : '#a8a8a8' }}"></span>
+                            <span class="action-legend-label">{{ item.type ? item.type.label : 'Uncategorized' }}</span>
+                            <span class="action-legend-value">{{ item.hours|number_format(1) }}h</span>
+                            <span class="action-legend-pct">{{ pct|number_format(0) }}%</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
         {% set overrunTodos = project.todos|filter(t => t.estimatedHours and t.spentHours and t.spentHours > t.estimatedHours) %}
         {% if overrunTodos|length > 0 %}
             <div class="overrun-panel">

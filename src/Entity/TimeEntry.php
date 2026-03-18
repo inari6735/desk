@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\ActionType;
 use App\Repository\TimeEntryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,6 +34,9 @@ class TimeEntry
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTime $endTime = null;
+
+    #[ORM\Column(length: 30, nullable: true, enumType: ActionType::class)]
+    private ?ActionType $actionType = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $note = null;
@@ -123,6 +127,18 @@ class TimeEntry
         }
 
         return $this->getHours();
+    }
+
+    public function getActionType(): ?ActionType
+    {
+        return $this->actionType;
+    }
+
+    public function setActionType(?ActionType $actionType): static
+    {
+        $this->actionType = $actionType;
+
+        return $this;
     }
 
     public function getNote(): ?string

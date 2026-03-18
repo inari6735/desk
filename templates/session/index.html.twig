@@ -65,7 +65,12 @@
                                     <span class="session-hours">{{ entry.computedHours|number_format(1) }}h</span>
                                 </div>
                                 <div class="session-details">
-                                    <div class="session-project">{{ entry.todo.project.name }}</div>
+                                    <div class="session-detail-top">
+                                        <div class="session-project">{{ entry.todo.project.name }}</div>
+                                        {% if entry.actionType %}
+                                            <span class="action-badge" style="--action-color: {{ entry.actionType.color }}">{{ entry.actionType.label }}</span>
+                                        {% endif %}
+                                    </div>
                                     <a href="{{ path('app_todo_show', {id: entry.todo.id}) }}" class="session-todo">{{ entry.todo.title }}</a>
                                     {% if entry.note %}
                                         <p class="session-note">{{ entry.note }}</p>

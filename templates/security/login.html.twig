@@ -48,6 +48,14 @@
             <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
 
+        <div class="auth-divider">
+            <span>or</span>
+        </div>
+
+        <a href="{{ path('app_google_connect') }}" class="btn btn-google">
+            Sign in with Google
+        </a>
+
         <div class="auth-footer">
             <p>Don't have an account? <a href="{{ path('app_register') }}">Create one</a></p>
         </div>

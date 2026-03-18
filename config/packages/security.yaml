@@ -23,6 +23,9 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+            custom_authenticators:
+                - App\Security\GoogleAuthenticator
+            entry_point: form_login
             logout:
                 path: app_logout
                 target: app_home

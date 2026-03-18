@@ -18,6 +18,35 @@ class TimeEntryRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return list<array{user: User, totalHours: float}>
+     */
+    public function findTopContributors(\DateTimeImmutable $from, \DateTimeImmutable $to, int $limit = 3): array
+    {
+        $rows = $this->createQueryBuilder('te')
+            ->select('IDENTITY(te.user) AS userId, SUM(te.hours) AS totalHours')
+            ->where('te.date >= :from')
+            ->andWhere('te.date <= :to')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->groupBy('te.user')
+            ->orderBy('totalHours', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        $em = $this->getEntityManager();
+        $result = [];
+        foreach ($rows as $row) {
+            $user = $em->getRepository(User::class)->find($row['userId']);
+            if ($user) {
+                $result[] = ['user' => $user, 'totalHours' => (float) $row['totalHours']];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @return list<TimeEntry>
      */
     public function findByUserAndDateRange(User $user, \DateTimeImmutable $from, \DateTimeImmutable $to): array

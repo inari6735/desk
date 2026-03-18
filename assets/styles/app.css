@@ -407,6 +407,55 @@ a:hover {
     gap: 0.4rem;
 }
 
+.dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* === Leaderboard === */
+.leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.leaderboard-rank {
+    font-size: 1.2rem;
+    width: 1.75rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.leaderboard-item .member-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.leaderboard-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: block;
+    line-height: 1.2;
+}
+
+.leaderboard-position {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+}
+
+.leaderboard-hours {
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
 /* === Dashboard Notice === */
 .dashboard-notice {
     border-radius: var(--radius);

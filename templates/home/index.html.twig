@@ -102,16 +102,46 @@
                     </div>
                 </div>
 
-                {% if stats.activeProjectNames|length > 0 %}
-                    <div class="dashboard-section">
-                        <h2>Active Projects This Month</h2>
-                        <div class="active-project-list">
-                            {% for name in stats.activeProjectNames %}
-                                <span class="badge">{{ name }}</span>
-                            {% endfor %}
+                <div class="dashboard-sidebar">
+                    {% if stats.topContributors|length > 0 %}
+                        <div class="dashboard-section">
+                            <h2>Top Contributors</h2>
+                            <div class="leaderboard">
+                                {% set medals = ['&#129351;', '&#129352;', '&#129353;'] %}
+                                {% for entry in stats.topContributors %}
+                                    <div class="leaderboard-item">
+                                        <span class="leaderboard-rank">{{ medals[loop.index0]|default(loop.index)|raw }}</span>
+                                        <div class="member-info">
+                                            {% if entry.user.avatarUrl %}
+                                                <img src="{{ entry.user.avatarUrl }}" alt="" class="avatar avatar-sm" referrerpolicy="no-referrer">
+                                            {% else %}
+                                                <span class="avatar avatar-sm avatar-placeholder">{{ entry.user.displayName|first|upper }}</span>
+                                            {% endif %}
+                                            <div>
+                                                <span class="leaderboard-name">{{ entry.user.displayName }}</span>
+                                                {% if entry.user.position %}
+                                                    <span class="leaderboard-position">{{ entry.user.position.label }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <span class="leaderboard-hours">{{ entry.totalHours|number_format(1) }}h</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
+
+                    {% if stats.activeProjectNames|length > 0 %}
+                        <div class="dashboard-section">
+                            <h2>Active Projects This Month</h2>
+                            <div class="active-project-list">
+                                {% for name in stats.activeProjectNames %}
+                                    <span class="badge">{{ name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </main>
     {% else %}

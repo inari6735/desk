@@ -69,6 +69,7 @@ class HomeController extends AbstractController
                 'monthName' => $now->format('F Y'),
                 'missingNotes' => $missingNotes,
                 'missingNotesCount' => count($missingNotes),
+                'topContributors' => $timeEntryRepo->findTopContributors($monthStart, $now, 3),
             ];
         }
 

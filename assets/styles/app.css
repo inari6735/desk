@@ -312,6 +312,21 @@ a:hover {
     background: rgba(79, 70, 229, 0.08);
 }
 
+.nav-link-highlight {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.nav-link-highlight:hover {
+    background: var(--color-primary-hover);
+    color: #fff;
+}
+
+.nav-link-highlight.active {
+    background: var(--color-primary-hover);
+    color: #fff;
+}
+
 /* === App Layout === */
 .app-layout {
     min-height: 100vh;

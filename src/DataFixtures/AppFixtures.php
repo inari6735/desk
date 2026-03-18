@@ -36,34 +36,34 @@ class AppFixtures extends Fixture
         $manager->persist($employeeRole);
 
         // --- Users ---
-        $admin = $this->createUser($manager, 'admin@example.com', 'admin', 'Admin', ['ROLE_ADMIN', 'ROLE_EMPLOYEE'], Position::CEO);
+        $admin = $this->createUser($manager, 'admin@example.com', 'admin', 'Admin', ['ROLE_ADMIN', 'ROLE_EMPLOYEE'], Position::CEO, '2019-01');
         $admin->addUserRole($adminRole);
 
-        $alice = $this->createUser($manager, 'alice@example.com', 'alice', 'Alice Johnson', ['ROLE_EMPLOYEE'], Position::FRONTEND);
+        $alice = $this->createUser($manager, 'alice@example.com', 'alice', 'Alice Johnson', ['ROLE_EMPLOYEE'], Position::FRONTEND, '2022-03');
         $alice->addUserRole($employeeRole);
 
-        $bob = $this->createUser($manager, 'bob@example.com', 'bob', 'Bob Smith', ['ROLE_EMPLOYEE'], Position::BACKEND);
+        $bob = $this->createUser($manager, 'bob@example.com', 'bob', 'Bob Smith', ['ROLE_EMPLOYEE'], Position::BACKEND, '2021-06');
         $bob->addUserRole($employeeRole);
 
-        $carol = $this->createUser($manager, 'carol@example.com', 'carol', 'Carol Williams', ['ROLE_EMPLOYEE'], Position::QA);
+        $carol = $this->createUser($manager, 'carol@example.com', 'carol', 'Carol Williams', ['ROLE_EMPLOYEE'], Position::QA, '2023-01');
         $carol->addUserRole($employeeRole);
 
-        $dave = $this->createUser($manager, 'dave@example.com', 'dave', 'Dave Brown', ['ROLE_EMPLOYEE'], Position::DEVOPS);
+        $dave = $this->createUser($manager, 'dave@example.com', 'dave', 'Dave Brown', ['ROLE_EMPLOYEE'], Position::DEVOPS, '2020-09');
         $dave->addUserRole($employeeRole);
 
-        $eve = $this->createUser($manager, 'eve@example.com', 'eve', 'Eve Davis', ['ROLE_EMPLOYEE'], Position::DESIGNER);
+        $eve = $this->createUser($manager, 'eve@example.com', 'eve', 'Eve Davis', ['ROLE_EMPLOYEE'], Position::DESIGNER, '2023-07');
         $eve->addUserRole($employeeRole);
 
-        $frank = $this->createUser($manager, 'frank@example.com', 'frank', 'Frank Miller', ['ROLE_EMPLOYEE'], Position::PM);
+        $frank = $this->createUser($manager, 'frank@example.com', 'frank', 'Frank Miller', ['ROLE_EMPLOYEE'], Position::PM, '2021-01');
         $frank->addUserRole($employeeRole);
 
-        $grace = $this->createUser($manager, 'grace@example.com', 'grace', 'Grace Lee', ['ROLE_EMPLOYEE'], Position::FULLSTACK);
+        $grace = $this->createUser($manager, 'grace@example.com', 'grace', 'Grace Lee', ['ROLE_EMPLOYEE'], Position::FULLSTACK, '2024-02');
         $grace->addUserRole($employeeRole);
 
-        $hank = $this->createUser($manager, 'hank@example.com', 'hank', 'Hank Wilson', ['ROLE_EMPLOYEE'], Position::HR);
+        $hank = $this->createUser($manager, 'hank@example.com', 'hank', 'Hank Wilson', ['ROLE_EMPLOYEE'], Position::HR, '2022-11');
         $hank->addUserRole($employeeRole);
 
-        $ivy = $this->createUser($manager, 'ivy@example.com', 'ivy', 'Ivy Taylor', ['ROLE_EMPLOYEE'], Position::MANAGER);
+        $ivy = $this->createUser($manager, 'ivy@example.com', 'ivy', 'Ivy Taylor', ['ROLE_EMPLOYEE'], Position::MANAGER, '2020-04');
         $ivy->addUserRole($employeeRole);
 
         // --- Projects ---
@@ -158,7 +158,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createUser(ObjectManager $manager, string $email, string $password, string $name, array $roles = [], ?Position $position = null): User
+    private function createUser(ObjectManager $manager, string $email, string $password, string $name, array $roles = [], ?Position $position = null, ?string $employedSince = null): User
     {
         $user = new User();
         $user->setEmail($email);
@@ -166,6 +166,9 @@ class AppFixtures extends Fixture
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setRoles($roles);
         $user->setPosition($position);
+        if ($employedSince) {
+            $user->setEmployedSince(new \DateTimeImmutable($employedSince . '-01'));
+        }
         $manager->persist($user);
 
         return $user;

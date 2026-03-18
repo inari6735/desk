@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ employee.displayName }} - Team{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container">
+        <div class="page-header">
+            <a href="{{ path('app_team') }}" class="back-link">&larr; Team</a>
+        </div>
+
+        <div class="profile-layout">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    {% if employee.avatarUrl %}
+                        <img src="{{ employee.avatarUrl }}" alt="" class="avatar avatar-xl" referrerpolicy="no-referrer">
+                    {% else %}
+                        <span class="avatar avatar-xl avatar-placeholder">{{ employee.displayName|first|upper }}</span>
+                    {% endif %}
+                </div>
+                <div class="profile-identity">
+                    <h1>{{ employee.displayName }}</h1>
+                    {% if employee.position %}
+                        <span class="position-badge" style="--pos-color: {{ employee.position.color }}">{{ employee.position.label }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <div class="profile-details">
+                    <div class="detail-section">
+                        <h2>Information</h2>
+                        <div class="profile-field">
+                            <span class="detail-label">Email</span>
+                            <span>{{ employee.email }}</span>
+                        </div>
+                        {% if employee.position %}
+                            <div class="profile-field">
+                                <span class="detail-label">Position</span>
+                                <span>{{ employee.position.label }}</span>
+                            </div>
+                        {% endif %}
+                        {% if employee.employedSince %}
+                            <div class="profile-field">
+                                <span class="detail-label">Employed Since</span>
+                                <span>{{ employee.employedSince|date('F Y') }}</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="detail-label">Tenure</span>
+                                <span>{{ employee.tenure }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="profile-sidebar">
+                    <div class="detail-section">
+                        <h2>{{ monthName }}</h2>
+                        <div class="profile-stat">
+                            <span class="stat-value">{{ monthHours|number_format(1) }}h</span>
+                            <span class="stat-label">Logged this month</span>
+                        </div>
+                    </div>
+
+                    {% if activeProjects|length > 0 %}
+                        <div class="detail-section">
+                            <h2>Active Projects</h2>
+                            <div class="active-project-list">
+                                {% for name in activeProjects %}
+                                    <span class="badge">{{ name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

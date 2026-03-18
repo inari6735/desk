@@ -6,6 +6,7 @@ use App\Enum\Position;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -46,6 +47,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 30, nullable: true, enumType: Position::class)]
     private ?Position $position = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $employedSince = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
@@ -167,6 +171,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->position = $position;
 
         return $this;
+    }
+
+    public function getEmployedSince(): ?\DateTimeImmutable
+    {
+        return $this->employedSince;
+    }
+
+    public function setEmployedSince(?\DateTimeImmutable $employedSince): static
+    {
+        $this->employedSince = $employedSince;
+
+        return $this;
+    }
+
+    public function getTenure(): ?string
+    {
+        if ($this->employedSince === null) {
+            return null;
+        }
+
+        $diff = $this->employedSince->diff(new \DateTimeImmutable());
+        $parts = [];
+        if ($diff->y > 0) {
+            $parts[] = $diff->y . ' year' . ($diff->y !== 1 ? 's' : '');
+        }
+        if ($diff->m > 0) {
+            $parts[] = $diff->m . ' month' . ($diff->m !== 1 ? 's' : '');
+        }
+
+        return $parts ? implode(', ', $parts) : 'Less than a month';
     }
 
     public function getGoogleId(): ?string

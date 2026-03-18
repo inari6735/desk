@@ -27,7 +27,7 @@
         {% else %}
             <div class="employee-grid">
                 {% for employee in employees %}
-                    <div class="employee-card">
+                    <a href="{{ path('app_team_show', {id: employee.id}) }}" class="employee-card">
                         <div class="employee-avatar">
                             {% if employee.avatarUrl %}
                                 <img src="{{ employee.avatarUrl }}" alt="" class="avatar avatar-lg" referrerpolicy="no-referrer">
@@ -42,7 +42,7 @@
                                 <span class="position-badge" style="--pos-color: {{ employee.position.color }}">{{ employee.position.label }}</span>
                             {% endif %}
                         </div>
-                    </div>
+                    </a>
                 {% endfor %}
             </div>
         {% endif %}

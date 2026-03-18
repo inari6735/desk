@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -29,6 +30,8 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email'),
             ChoiceField::new('position')
                 ->setChoices(Position::cases())
+                ->setRequired(false),
+            DateField::new('employedSince', 'Employed Since')
                 ->setRequired(false),
             ChoiceField::new('roles')
                 ->setChoices([

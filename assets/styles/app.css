@@ -316,6 +316,7 @@ a:hover {
 .avatar-xs { width: 20px; height: 20px; font-size: 0.6rem; }
 .avatar-sm { width: 24px; height: 24px; font-size: 0.65rem; }
 .avatar-lg { width: 48px; height: 48px; font-size: 1.2rem; }
+.avatar-xl { width: 80px; height: 80px; font-size: 2rem; }
 
 .avatar-placeholder {
     display: inline-flex;
@@ -923,6 +924,15 @@ a:hover {
     display: flex;
     align-items: center;
     gap: var(--cds-spacing-05);
+    color: var(--cds-text-primary);
+    transition: background 0.1s;
+    border-left: 3px solid transparent;
+}
+
+a.employee-card:hover {
+    background: var(--cds-layer-hover);
+    text-decoration: none;
+    border-left-color: var(--cds-interactive);
 }
 
 .employee-avatar { flex-shrink: 0; }
@@ -1095,6 +1105,54 @@ a:hover {
 
 .session-grand-total strong { color: var(--cds-text-primary); font-size: 1rem; font-family: 'IBM Plex Mono', monospace; }
 
+/* === Employee Profile === */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: var(--cds-spacing-06);
+    margin-bottom: var(--cds-spacing-07);
+}
+
+.profile-identity h1 {
+    font-size: 1.75rem;
+    font-weight: 400;
+    margin-bottom: var(--cds-spacing-03);
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--cds-spacing-05);
+    align-items: start;
+}
+
+.profile-field {
+    padding: var(--cds-spacing-04) 0;
+    border-bottom: 1px solid var(--cds-border-subtle);
+}
+
+.profile-field:last-child { border-bottom: none; }
+
+.profile-field span:not(.detail-label) {
+    font-size: 0.875rem;
+}
+
+.profile-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+}
+
+.profile-stat .stat-value {
+    font-size: 2rem;
+}
+
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cds-spacing-05);
+}
+
 /* === Responsive === */
 @media (max-width: 768px) {
     .todo-board { grid-template-columns: 1fr; }
@@ -1103,7 +1161,8 @@ a:hover {
     .employee-grid { grid-template-columns: 1fr; }
 
     .todo-detail-grid,
-    .dashboard-grid { grid-template-columns: 1fr; }
+    .dashboard-grid,
+    .profile-grid { grid-template-columns: 1fr; }
 
     .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
 

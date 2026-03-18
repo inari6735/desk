@@ -4,6 +4,7 @@
         {% if app.user %}
             <a href="{{ path('app_projects') }}" class="nav-link {{ app.request.attributes.get('_route') starts with 'app_project' ? 'active' : '' }}">Projects</a>
             <a href="{{ path('app_todos') }}" class="nav-link {{ app.request.attributes.get('_route') == 'app_todos' ? 'active' : '' }}">My Todos</a>
+            <a href="{{ path('app_sessions') }}" class="nav-link {{ app.request.attributes.get('_route') starts with 'app_session' ? 'active' : '' }}">Sessions</a>
             <a href="{{ path('app_team') }}" class="nav-link {{ app.request.attributes.get('_route') == 'app_team' ? 'active' : '' }}">Team</a>
         {% endif %}
     </div>

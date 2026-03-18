@@ -105,20 +105,20 @@ class AppFixtures extends Fixture
 
         // --- Todos: Website Redesign (budget: 120h) ---
         $t = $this->createTodo($manager, $website, 'Design new homepage mockup', 'Create wireframes and high-fidelity mockups for the new landing page.', TodoStatus::DONE, $alice, '-10 days', 16, 18);
-        $this->logTime($manager, $t, $alice, 8, '-12 days', 'Initial wireframes');
-        $this->logTime($manager, $t, $alice, 6, '-11 days', 'High-fidelity mockups');
-        $this->logTime($manager, $t, $bob, 4, '-10 days', 'Design review and revisions');
+        $this->logTime($manager, $t, $alice, 8, '-12 days', 'Initial wireframes', '08:00');
+        $this->logTime($manager, $t, $alice, 6, '-11 days', 'High-fidelity mockups', '09:00');
+        $this->logTime($manager, $t, $bob, 4, '-10 days', 'Design review and revisions', '13:00');
 
         $t = $this->createTodo($manager, $website, 'Implement responsive navbar', null, TodoStatus::DONE, $bob, '-5 days', 8, 6);
-        $this->logTime($manager, $t, $bob, 4, '-7 days', 'HTML/CSS structure');
-        $this->logTime($manager, $t, $bob, 2, '-6 days', 'Mobile breakpoints');
+        $this->logTime($manager, $t, $bob, 4, '-7 days', 'HTML/CSS structure', '09:00');
+        $this->logTime($manager, $t, $bob, 2, '-6 days', 'Mobile breakpoints', '14:00');
 
         $t = $this->createTodo($manager, $website, 'Build hero section', 'Implement animated hero with CTA buttons.', TodoStatus::IN_PROGRESS, $alice, '+3 days', 12, 5);
-        $this->logTime($manager, $t, $alice, 3, '-2 days', 'Layout and animations');
-        $this->logTime($manager, $t, $alice, 2, '-1 day', 'CTA buttons and responsive');
+        $this->logTime($manager, $t, $alice, 3, '-2 days', 'Layout and animations', '09:30');
+        $this->logTime($manager, $t, $alice, 2, '-1 day', 'CTA buttons and responsive', '10:00');
 
         $t = $this->createTodo($manager, $website, 'Footer component', null, TodoStatus::IN_PROGRESS, $bob, '+5 days', 6, 2);
-        $this->logTime($manager, $t, $bob, 2, '-1 day', 'Basic structure');
+        $this->logTime($manager, $t, $bob, 2, '-1 day', 'Basic structure', '08:30');
 
         $this->createTodo($manager, $website, 'Contact form', 'Form with email validation and reCAPTCHA.', TodoStatus::TODO, $alice, '+10 days', 10, 0);
         $this->createTodo($manager, $website, 'SEO optimization', null, TodoStatus::TODO, null, '+14 days', 8, 0);
@@ -126,18 +126,18 @@ class AppFixtures extends Fixture
 
         // --- Todos: API Platform (budget: 200h) ---
         $t = $this->createTodo($manager, $api, 'Set up API skeleton', null, TodoStatus::DONE, $bob, '-15 days', 8, 8);
-        $this->logTime($manager, $t, $bob, 5, '-17 days', 'Project setup and config');
-        $this->logTime($manager, $t, $bob, 3, '-16 days', 'Base controller and routing');
+        $this->logTime($manager, $t, $bob, 5, '-17 days', 'Project setup and config', '08:00');
+        $this->logTime($manager, $t, $bob, 3, '-16 days', 'Base controller and routing', '09:00');
 
         $t = $this->createTodo($manager, $api, 'User authentication endpoints', 'JWT-based auth with refresh tokens.', TodoStatus::DONE, $bob, '-8 days', 24, 28);
-        $this->logTime($manager, $t, $bob, 8, '-13 days', 'JWT setup and login');
-        $this->logTime($manager, $t, $bob, 8, '-12 days', 'Refresh tokens');
-        $this->logTime($manager, $t, $carol, 6, '-11 days', 'Registration and validation');
-        $this->logTime($manager, $t, $bob, 6, '-10 days', 'Testing and edge cases');
+        $this->logTime($manager, $t, $bob, 8, '-13 days', 'JWT setup and login', '08:00');
+        $this->logTime($manager, $t, $bob, 8, '-12 days', 'Refresh tokens', '08:00');
+        $this->logTime($manager, $t, $carol, 6, '-11 days', 'Registration and validation', '09:00');
+        $this->logTime($manager, $t, $bob, 6, '-10 days', 'Testing and edge cases', '10:00');
 
         $t = $this->createTodo($manager, $api, 'CRUD for products', null, TodoStatus::IN_PROGRESS, $carol, '+2 days', 16, 10);
-        $this->logTime($manager, $t, $carol, 6, '-3 days', 'Entity and endpoints');
-        $this->logTime($manager, $t, $carol, 4, '-2 days', 'Validation and filters');
+        $this->logTime($manager, $t, $carol, 6, '-3 days', 'Entity and endpoints', '08:30');
+        $this->logTime($manager, $t, $carol, 4, '-2 days', 'Validation and filters', '13:00');
 
         $this->createTodo($manager, $api, 'Rate limiting middleware', 'Implement token-bucket rate limiter.', TodoStatus::TODO, $bob, '+7 days', 12, 0);
         $this->createTodo($manager, $api, 'API documentation', 'Generate OpenAPI spec with Swagger UI.', TodoStatus::TODO, $alice, '+12 days', 16, 0);
@@ -145,12 +145,12 @@ class AppFixtures extends Fixture
 
         // --- Todos: Mobile App (budget: 300h) ---
         $t = $this->createTodo($manager, $mobile, 'Project setup and CI', 'Set up React Native project with GitHub Actions.', TodoStatus::DONE, $admin, '-20 days', 12, 10);
-        $this->logTime($manager, $t, $admin, 6, '-22 days', 'React Native init and deps');
-        $this->logTime($manager, $t, $admin, 4, '-21 days', 'CI pipeline config');
+        $this->logTime($manager, $t, $admin, 6, '-22 days', 'React Native init and deps', '08:00');
+        $this->logTime($manager, $t, $admin, 4, '-21 days', 'CI pipeline config', '09:00');
 
         $t = $this->createTodo($manager, $mobile, 'Login screen', null, TodoStatus::IN_PROGRESS, $admin, '+1 day', 16, 8);
-        $this->logTime($manager, $t, $admin, 5, '-3 days', 'UI layout and form');
-        $this->logTime($manager, $t, $admin, 3, '-2 days', 'API integration');
+        $this->logTime($manager, $t, $admin, 5, '-3 days', 'UI layout and form', '08:30');
+        $this->logTime($manager, $t, $admin, 3, '-2 days', 'API integration', '14:00');
 
         $this->createTodo($manager, $mobile, 'Dashboard screen', 'Main screen showing user stats and recent activity.', TodoStatus::TODO, $carol, '+8 days', 24, 0);
         $this->createTodo($manager, $mobile, 'Push notifications', null, TodoStatus::TODO, null, '+18 days', 20, 0);
@@ -218,7 +218,7 @@ class AppFixtures extends Fixture
         return $todo;
     }
 
-    private function logTime(ObjectManager $manager, Todo $todo, User $user, float $hours, string $dateOffset, ?string $note = null): void
+    private function logTime(ObjectManager $manager, Todo $todo, User $user, float $hours, string $dateOffset, ?string $note = null, string $startTime = '09:00', ?string $endTime = null): void
     {
         $entry = new TimeEntry();
         $entry->setTodo($todo);
@@ -226,6 +226,15 @@ class AppFixtures extends Fixture
         $entry->setHours($hours);
         $entry->setDate(new \DateTimeImmutable($dateOffset));
         $entry->setNote($note);
+        $entry->setStartTime(new \DateTime($startTime));
+        if ($endTime) {
+            $entry->setEndTime(new \DateTime($endTime));
+        } else {
+            // Compute end from start + hours
+            $end = new \DateTime($startTime);
+            $end->modify(sprintf('+%d minutes', (int) ($hours * 60)));
+            $entry->setEndTime($end);
+        }
         $manager->persist($entry);
     }
 }

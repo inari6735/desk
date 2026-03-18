@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sessions{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container">
+        {% for message in app.flashes('success') %}
+            <div class="flash flash-success">{{ message }}</div>
+        {% endfor %}
+
+        <div class="page-header page-header-row">
+            <h1>Sessions</h1>
+            <a href="{{ path('app_session_new') }}" class="btn btn-primary">+ Log Session</a>
+        </div>
+
+        <form class="session-filters" method="get" action="{{ path('app_sessions') }}">
+            <div class="filter-fields">
+                <div class="form-group">
+                    <label for="from">From</label>
+                    <input type="date" id="from" name="from" value="{{ from|date('Y-m-d') }}" class="form-input" max="{{ 'now'|date('Y-m-d') }}">
+                </div>
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <input type="date" id="to" name="to" value="{{ to|date('Y-m-d') }}" class="form-input" max="{{ 'now'|date('Y-m-d') }}">
+                </div>
+                <button type="submit" class="btn btn-outline btn-sm filter-submit">Filter</button>
+            </div>
+            <div class="filter-shortcuts">
+                <a href="{{ path('app_sessions', {from: 'now'|date('Y-m-d'), to: 'now'|date('Y-m-d')}) }}" class="btn btn-outline btn-xs">Today</a>
+                <a href="{{ path('app_sessions', {from: 'monday this week'|date('Y-m-d'), to: 'now'|date('Y-m-d')}) }}" class="btn btn-outline btn-xs">This Week</a>
+                <a href="{{ path('app_sessions', {from: 'first day of this month'|date('Y-m-d'), to: 'now'|date('Y-m-d')}) }}" class="btn btn-outline btn-xs">This Month</a>
+            </div>
+        </form>
+
+        {% set grandTotal = 0 %}
+        {% for dateKey, entries in days %}
+            {% set dayTotal = dailyTotals[dateKey] %}
+            {% set grandTotal = grandTotal + dayTotal %}
+            {% set isToday = dateKey == 'now'|date('Y-m-d') %}
+
+            <div class="session-day">
+                <div class="session-day-header">
+                    <div class="session-day-title">
+                        <h2>{{ dateKey|date('l, M d, Y') }}{% if isToday %} <span class="badge">Today</span>{% endif %}</h2>
+                    </div>
+                    <div class="session-day-meta">
+                        <span class="session-day-total">{{ dayTotal|number_format(1) }}h</span>
+                        <a href="{{ path('app_session_new', {date: dateKey}) }}" class="btn btn-outline btn-xs">+ Add</a>
+                    </div>
+                </div>
+
+                {% if entries is empty %}
+                    <div class="session-empty">No sessions logged</div>
+                {% else %}
+                    <div class="session-entries">
+                        {% for entry in entries %}
+                            <div class="session-entry">
+                                <div class="session-time">
+                                    {% if entry.startTime and entry.endTime %}
+                                        <span class="session-timerange">{{ entry.startTime|date('H:i') }} — {{ entry.endTime|date('H:i') }}</span>
+                                    {% endif %}
+                                    <span class="session-hours">{{ entry.computedHours|number_format(1) }}h</span>
+                                </div>
+                                <div class="session-details">
+                                    <div class="session-project">{{ entry.todo.project.name }}</div>
+                                    <a href="{{ path('app_todo_show', {id: entry.todo.id}) }}" class="session-todo">{{ entry.todo.title }}</a>
+                                    {% if entry.note %}
+                                        <p class="session-note">{{ entry.note }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="session-actions">
+                                    <a href="{{ path('app_session_edit', {id: entry.id}) }}" class="todo-action" title="Edit">&#9998;</a>
+                                    <form method="post" action="{{ path('app_session_delete', {id: entry.id}) }}" class="inline-form" onsubmit="return confirm('Delete this session?')">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete-session-' ~ entry.id) }}">
+                                        <button type="submit" class="todo-action todo-action-delete" title="Delete">&times;</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if days|length > 1 %}
+            <div class="session-grand-total">
+                Total: <strong>{{ grandTotal|number_format(1) }}h</strong> over {{ days|length }} day{{ days|length != 1 ? 's' : '' }}
+            </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

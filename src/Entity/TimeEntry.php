@@ -28,6 +28,12 @@ class TimeEntry
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 1)]
     private ?string $hours = null;
 
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTime $startTime = null;
+
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTime $endTime = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $note = null;
 
@@ -82,6 +88,41 @@ class TimeEntry
         $this->hours = (string) $hours;
 
         return $this;
+    }
+
+    public function getStartTime(): ?\DateTime
+    {
+        return $this->startTime;
+    }
+
+    public function setStartTime(?\DateTime $startTime): static
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getEndTime(): ?\DateTime
+    {
+        return $this->endTime;
+    }
+
+    public function setEndTime(?\DateTime $endTime): static
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    public function getComputedHours(): ?float
+    {
+        if ($this->startTime && $this->endTime) {
+            $diff = $this->endTime->getTimestamp() - $this->startTime->getTimestamp();
+
+            return round($diff / 3600, 1);
+        }
+
+        return $this->getHours();
     }
 
     public function getNote(): ?string

@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ entry ? 'Edit' : 'New' }} Session{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container container-sm">
+        <div class="page-header">
+            <a href="{{ path('app_sessions') }}" class="back-link">&larr; Sessions</a>
+            <h1>{{ entry ? 'Edit' : 'Log' }} Session</h1>
+        </div>
+
+        <div class="form-card">
+            {{ form_start(form, {attr: {class: 'todo-form'}}) }}
+                <div class="form-group">
+                    {{ form_label(form.todo, 'Task') }}
+                    {{ form_widget(form.todo, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(form.todo) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.date) }}
+                    {{ form_widget(form.date, {attr: {class: 'form-input', max: 'now'|date('Y-m-d')}}) }}
+                    {{ form_errors(form.date) }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.startTime, 'Start') }}
+                        {{ form_widget(form.startTime, {attr: {class: 'form-input'}}) }}
+                        {{ form_errors(form.startTime) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.endTime, 'End') }}
+                        {{ form_widget(form.endTime, {attr: {class: 'form-input'}}) }}
+                        {{ form_errors(form.endTime) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.note, 'Notes') }}
+                    {{ form_widget(form.note, {attr: {class: 'form-input form-textarea'}}) }}
+                    {{ form_errors(form.note) }}
+                </div>
+
+                {{ form_errors(form) }}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">{{ entry ? 'Save Changes' : 'Log Session' }}</button>
+                    <a href="{{ path('app_sessions') }}" class="btn btn-outline">Cancel</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </main>
+</div>
+{% endblock %}

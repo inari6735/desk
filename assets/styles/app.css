@@ -1127,6 +1127,172 @@ a:hover {
     gap: 0.75rem;
 }
 
+/* === Sessions === */
+.session-filters {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-fields {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-fields .form-group {
+    flex: 0 0 auto;
+}
+
+.filter-fields .form-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-muted);
+}
+
+.filter-submit {
+    margin-bottom: 0;
+}
+
+.filter-shortcuts {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.session-day {
+    margin-bottom: 1.5rem;
+}
+
+.session-day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.session-day-title h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.session-day-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.session-day-total {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.session-empty {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius);
+}
+
+.session-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.session-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+}
+
+.session-time {
+    flex-shrink: 0;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.session-timerange {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.session-hours {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.session-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.session-project {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    margin-bottom: 0.1rem;
+}
+
+.session-todo {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.session-todo:hover {
+    color: var(--color-primary);
+}
+
+.session-note {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+    line-height: 1.4;
+}
+
+.session-actions {
+    display: flex;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
+.session-grand-total {
+    text-align: right;
+    padding: 1rem 0;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    border-top: 2px solid var(--color-border);
+}
+
+.session-grand-total strong {
+    color: var(--color-text);
+    font-size: 1.1rem;
+}
+
 /* === Responsive === */
 @media (max-width: 768px) {
     .todo-board {

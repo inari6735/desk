@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Project;
 use App\Entity\ProjectMember;
 use App\Entity\Role;
+use App\Entity\TimeEntry;
 use App\Entity\Todo;
 use App\Entity\User;
 use App\Enum\Permission;
@@ -84,27 +85,56 @@ class AppFixtures extends Fixture
         ]);
 
         // --- Todos: Website Redesign (budget: 120h) ---
-        $this->createTodo($manager, $website, 'Design new homepage mockup', 'Create wireframes and high-fidelity mockups for the new landing page.', TodoStatus::DONE, $alice, '-10 days', 16, 18);
-        $this->createTodo($manager, $website, 'Implement responsive navbar', null, TodoStatus::DONE, $bob, '-5 days', 8, 6);
-        $this->createTodo($manager, $website, 'Build hero section', 'Implement animated hero with CTA buttons.', TodoStatus::IN_PROGRESS, $alice, '+3 days', 12, 5);
-        $this->createTodo($manager, $website, 'Footer component', null, TodoStatus::IN_PROGRESS, $bob, '+5 days', 6, 2);
-        $this->createTodo($manager, $website, 'Contact form', 'Form with email validation and reCAPTCHA.', TodoStatus::TODO, $alice, '+10 days', 10, null);
-        $this->createTodo($manager, $website, 'SEO optimization', null, TodoStatus::TODO, null, '+14 days', 8, null);
-        $this->createTodo($manager, $website, 'Performance audit', 'Run Lighthouse and fix issues.', TodoStatus::TODO, $bob, '+20 days', 12, null);
+        $t = $this->createTodo($manager, $website, 'Design new homepage mockup', 'Create wireframes and high-fidelity mockups for the new landing page.', TodoStatus::DONE, $alice, '-10 days', 16, 18);
+        $this->logTime($manager, $t, $alice, 8, '-12 days', 'Initial wireframes');
+        $this->logTime($manager, $t, $alice, 6, '-11 days', 'High-fidelity mockups');
+        $this->logTime($manager, $t, $bob, 4, '-10 days', 'Design review and revisions');
+
+        $t = $this->createTodo($manager, $website, 'Implement responsive navbar', null, TodoStatus::DONE, $bob, '-5 days', 8, 6);
+        $this->logTime($manager, $t, $bob, 4, '-7 days', 'HTML/CSS structure');
+        $this->logTime($manager, $t, $bob, 2, '-6 days', 'Mobile breakpoints');
+
+        $t = $this->createTodo($manager, $website, 'Build hero section', 'Implement animated hero with CTA buttons.', TodoStatus::IN_PROGRESS, $alice, '+3 days', 12, 5);
+        $this->logTime($manager, $t, $alice, 3, '-2 days', 'Layout and animations');
+        $this->logTime($manager, $t, $alice, 2, '-1 day', 'CTA buttons and responsive');
+
+        $t = $this->createTodo($manager, $website, 'Footer component', null, TodoStatus::IN_PROGRESS, $bob, '+5 days', 6, 2);
+        $this->logTime($manager, $t, $bob, 2, '-1 day', 'Basic structure');
+
+        $this->createTodo($manager, $website, 'Contact form', 'Form with email validation and reCAPTCHA.', TodoStatus::TODO, $alice, '+10 days', 10, 0);
+        $this->createTodo($manager, $website, 'SEO optimization', null, TodoStatus::TODO, null, '+14 days', 8, 0);
+        $this->createTodo($manager, $website, 'Performance audit', 'Run Lighthouse and fix issues.', TodoStatus::TODO, $bob, '+20 days', 12, 0);
 
         // --- Todos: API Platform (budget: 200h) ---
-        $this->createTodo($manager, $api, 'Set up API skeleton', null, TodoStatus::DONE, $bob, '-15 days', 8, 8);
-        $this->createTodo($manager, $api, 'User authentication endpoints', 'JWT-based auth with refresh tokens.', TodoStatus::DONE, $bob, '-8 days', 24, 28);
-        $this->createTodo($manager, $api, 'CRUD for products', null, TodoStatus::IN_PROGRESS, $carol, '+2 days', 16, 10);
-        $this->createTodo($manager, $api, 'Rate limiting middleware', 'Implement token-bucket rate limiter.', TodoStatus::TODO, $bob, '+7 days', 12, null);
-        $this->createTodo($manager, $api, 'API documentation', 'Generate OpenAPI spec with Swagger UI.', TodoStatus::TODO, $alice, '+12 days', 16, null);
-        $this->createTodo($manager, $api, 'Integration tests', null, TodoStatus::TODO, $carol, '+15 days', 20, null);
+        $t = $this->createTodo($manager, $api, 'Set up API skeleton', null, TodoStatus::DONE, $bob, '-15 days', 8, 8);
+        $this->logTime($manager, $t, $bob, 5, '-17 days', 'Project setup and config');
+        $this->logTime($manager, $t, $bob, 3, '-16 days', 'Base controller and routing');
+
+        $t = $this->createTodo($manager, $api, 'User authentication endpoints', 'JWT-based auth with refresh tokens.', TodoStatus::DONE, $bob, '-8 days', 24, 28);
+        $this->logTime($manager, $t, $bob, 8, '-13 days', 'JWT setup and login');
+        $this->logTime($manager, $t, $bob, 8, '-12 days', 'Refresh tokens');
+        $this->logTime($manager, $t, $carol, 6, '-11 days', 'Registration and validation');
+        $this->logTime($manager, $t, $bob, 6, '-10 days', 'Testing and edge cases');
+
+        $t = $this->createTodo($manager, $api, 'CRUD for products', null, TodoStatus::IN_PROGRESS, $carol, '+2 days', 16, 10);
+        $this->logTime($manager, $t, $carol, 6, '-3 days', 'Entity and endpoints');
+        $this->logTime($manager, $t, $carol, 4, '-2 days', 'Validation and filters');
+
+        $this->createTodo($manager, $api, 'Rate limiting middleware', 'Implement token-bucket rate limiter.', TodoStatus::TODO, $bob, '+7 days', 12, 0);
+        $this->createTodo($manager, $api, 'API documentation', 'Generate OpenAPI spec with Swagger UI.', TodoStatus::TODO, $alice, '+12 days', 16, 0);
+        $this->createTodo($manager, $api, 'Integration tests', null, TodoStatus::TODO, $carol, '+15 days', 20, 0);
 
         // --- Todos: Mobile App (budget: 300h) ---
-        $this->createTodo($manager, $mobile, 'Project setup and CI', 'Set up React Native project with GitHub Actions.', TodoStatus::DONE, $admin, '-20 days', 12, 10);
-        $this->createTodo($manager, $mobile, 'Login screen', null, TodoStatus::IN_PROGRESS, $admin, '+1 day', 16, 8);
-        $this->createTodo($manager, $mobile, 'Dashboard screen', 'Main screen showing user stats and recent activity.', TodoStatus::TODO, $carol, '+8 days', 24, null);
-        $this->createTodo($manager, $mobile, 'Push notifications', null, TodoStatus::TODO, null, '+18 days', 20, null);
+        $t = $this->createTodo($manager, $mobile, 'Project setup and CI', 'Set up React Native project with GitHub Actions.', TodoStatus::DONE, $admin, '-20 days', 12, 10);
+        $this->logTime($manager, $t, $admin, 6, '-22 days', 'React Native init and deps');
+        $this->logTime($manager, $t, $admin, 4, '-21 days', 'CI pipeline config');
+
+        $t = $this->createTodo($manager, $mobile, 'Login screen', null, TodoStatus::IN_PROGRESS, $admin, '+1 day', 16, 8);
+        $this->logTime($manager, $t, $admin, 5, '-3 days', 'UI layout and form');
+        $this->logTime($manager, $t, $admin, 3, '-2 days', 'API integration');
+
+        $this->createTodo($manager, $mobile, 'Dashboard screen', 'Main screen showing user stats and recent activity.', TodoStatus::TODO, $carol, '+8 days', 24, 0);
+        $this->createTodo($manager, $mobile, 'Push notifications', null, TodoStatus::TODO, null, '+18 days', 20, 0);
 
         $manager->flush();
     }
@@ -151,7 +181,7 @@ class AppFixtures extends Fixture
         ?string $dueOffset = null,
         ?float $estimatedHours = null,
         ?float $spentHours = null,
-    ): void {
+    ): Todo {
         $todo = new Todo();
         $todo->setTitle($title);
         $todo->setDescription($description);
@@ -164,5 +194,18 @@ class AppFixtures extends Fixture
             $todo->setDueDate(new \DateTimeImmutable($dueOffset));
         }
         $manager->persist($todo);
+
+        return $todo;
+    }
+
+    private function logTime(ObjectManager $manager, Todo $todo, User $user, float $hours, string $dateOffset, ?string $note = null): void
+    {
+        $entry = new TimeEntry();
+        $entry->setTodo($todo);
+        $entry->setUser($user);
+        $entry->setHours($hours);
+        $entry->setDate(new \DateTimeImmutable($dateOffset));
+        $entry->setNote($note);
+        $manager->persist($entry);
     }
 }

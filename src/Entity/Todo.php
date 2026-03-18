@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\TodoStatus;
 use App\Repository\TodoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -45,9 +47,15 @@ class Todo
     #[ORM\ManyToOne]
     private ?User $assignedTo = null;
 
+    /** @var Collection<int, TimeEntry> */
+    #[ORM\OneToMany(targetEntity: TimeEntry::class, mappedBy: 'todo', orphanRemoval: true)]
+    #[ORM\OrderBy(['date' => 'DESC'])]
+    private Collection $timeEntries;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->timeEntries = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -159,5 +167,40 @@ class Todo
         $this->assignedTo = $assignedTo;
 
         return $this;
+    }
+
+    /** @return Collection<int, TimeEntry> */
+    public function getTimeEntries(): Collection
+    {
+        return $this->timeEntries;
+    }
+
+    public function getTotalLoggedHours(): float
+    {
+        $total = 0.0;
+        foreach ($this->timeEntries as $entry) {
+            $total += $entry->getHours() ?? 0;
+        }
+
+        return $total;
+    }
+
+    /**
+     * @return array<string, array{user: User, hours: float}>
+     */
+    public function getHoursByUser(): array
+    {
+        $byUser = [];
+        foreach ($this->timeEntries as $entry) {
+            $userId = $entry->getUser()->getId()->toRfc4122();
+            if (!isset($byUser[$userId])) {
+                $byUser[$userId] = ['user' => $entry->getUser(), 'hours' => 0.0];
+            }
+            $byUser[$userId]['hours'] += $entry->getHours() ?? 0;
+        }
+
+        uasort($byUser, fn ($a, $b) => $b['hours'] <=> $a['hours']);
+
+        return $byUser;
     }
 }

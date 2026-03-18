@@ -36,7 +36,7 @@
                             {% set canEdit = editableTodos[todo.id|default('')] is defined %}
                             <tr>
                                 <td>
-                                    <span class="todo-title">{{ todo.title }}</span>
+                                    <a href="{{ path('app_todo_show', {id: todo.id}) }}" class="todo-title-link">{{ todo.title }}</a>
                                     {% if todo.description %}
                                         <span class="todo-description">{{ todo.description|u.truncate(60, '...') }}</span>
                                     {% endif %}

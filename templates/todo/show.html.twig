@@ -1,0 +1,185 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ todo.title }} - {{ project.name }}{% endblock %}
+
+{% block body %}
+<div class="app-layout">
+    {% include '_navbar.html.twig' %}
+
+    <main class="container">
+        {% for message in app.flashes('success') %}
+            <div class="flash flash-success">{{ message }}</div>
+        {% endfor %}
+
+        <div class="page-header">
+            <a href="{{ path('app_project_show', {id: project.id}) }}" class="back-link">&larr; {{ project.name }}</a>
+            <div class="todo-show-header">
+                <div>
+                    <h1>{{ todo.title }}</h1>
+                    <span class="status-badge status-{{ todo.status.value }}">{{ todo.status.label }}</span>
+                </div>
+                {% if canEdit %}
+                    <a href="{{ path('app_todo_edit', {id: todo.id}) }}" class="btn btn-outline btn-sm">Edit</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="todo-detail-grid">
+            <div class="todo-detail-main">
+                {% if todo.description %}
+                    <div class="detail-section">
+                        <h2>Description</h2>
+                        <p>{{ todo.description|nl2br }}</p>
+                    </div>
+                {% endif %}
+
+                {# Hours stats #}
+                {% set logged = todo.totalLoggedHours %}
+                {% set estimated = todo.estimatedHours %}
+                <div class="detail-section">
+                    <h2>Time Tracking</h2>
+                    <div class="hours-stats">
+                        <div class="hours-stat">
+                            <span class="hours-stat-value">{{ logged|number_format(1) }}h</span>
+                            <span class="hours-stat-label">Logged</span>
+                        </div>
+                        {% if estimated %}
+                            <div class="hours-stat">
+                                <span class="hours-stat-value">{{ estimated|number_format(1) }}h</span>
+                                <span class="hours-stat-label">Estimated</span>
+                            </div>
+                            <div class="hours-stat">
+                                <span class="hours-stat-value {{ (estimated - logged) < 0 ? 'overdue' : '' }}">{{ (estimated - logged)|number_format(1) }}h</span>
+                                <span class="hours-stat-label">Remaining</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if estimated and estimated > 0 %}
+                        {% set pct = min((logged / estimated) * 100, 100) %}
+                        <div class="progress-track" style="margin-top: 0.75rem">
+                            <div class="progress-fill {{ pct > 90 ? 'progress-danger' : (pct > 70 ? 'progress-warning' : '') }}" style="width: {{ pct }}%"></div>
+                        </div>
+                        <div class="budget-percent {{ logged > estimated ? 'overdue' : '' }}">{{ ((logged / estimated) * 100)|number_format(0) }}% of estimate</div>
+                    {% endif %}
+                </div>
+
+                {# Hours by user breakdown #}
+                {% set hoursByUser = todo.hoursByUser %}
+                {% if hoursByUser|length > 0 %}
+                    <div class="detail-section">
+                        <h2>Hours by User</h2>
+                        <div class="user-hours-list">
+                            {% for entry in hoursByUser %}
+                                <div class="user-hours-item">
+                                    <div class="member-info">
+                                        {% if entry.user.avatarUrl %}
+                                            <img src="{{ entry.user.avatarUrl }}" alt="" class="avatar avatar-sm" referrerpolicy="no-referrer">
+                                        {% else %}
+                                            <span class="avatar avatar-sm avatar-placeholder">{{ entry.user.displayName|first|upper }}</span>
+                                        {% endif %}
+                                        <span class="member-name">{{ entry.user.displayName }}</span>
+                                    </div>
+                                    <div class="user-hours-bar">
+                                        {% if logged > 0 %}
+                                            <div class="progress-track progress-track-sm" style="flex: 1">
+                                                <div class="progress-fill" style="width: {{ (entry.hours / logged) * 100 }}%"></div>
+                                            </div>
+                                        {% endif %}
+                                        <span class="user-hours-value">{{ entry.hours|number_format(1) }}h</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# Time entries log #}
+                {% if todo.timeEntries|length > 0 %}
+                    <div class="detail-section">
+                        <h2>Time Log</h2>
+                        <div class="time-log">
+                            {% for entry in todo.timeEntries %}
+                                <div class="time-log-entry">
+                                    <div class="time-log-left">
+                                        <div class="member-info">
+                                            {% if entry.user.avatarUrl %}
+                                                <img src="{{ entry.user.avatarUrl }}" alt="" class="avatar avatar-xs" referrerpolicy="no-referrer">
+                                            {% else %}
+                                                <span class="avatar avatar-xs avatar-placeholder">{{ entry.user.displayName|first|upper }}</span>
+                                            {% endif %}
+                                            <span>{{ entry.user.displayName }}</span>
+                                        </div>
+                                        {% if entry.note %}
+                                            <p class="time-log-note">{{ entry.note }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="time-log-right">
+                                        <span class="time-log-hours">{{ entry.hours|number_format(1) }}h</span>
+                                        <span class="time-log-date">{{ entry.date|date('M d, Y') }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="todo-detail-sidebar">
+                <div class="detail-card">
+                    <div class="detail-field">
+                        <span class="detail-label">Assigned To</span>
+                        {% if todo.assignedTo %}
+                            <div class="member-info">
+                                {% if todo.assignedTo.avatarUrl %}
+                                    <img src="{{ todo.assignedTo.avatarUrl }}" alt="" class="avatar avatar-sm" referrerpolicy="no-referrer">
+                                {% else %}
+                                    <span class="avatar avatar-sm avatar-placeholder">{{ todo.assignedTo.displayName|first|upper }}</span>
+                                {% endif %}
+                                <span>{{ todo.assignedTo.displayName }}</span>
+                            </div>
+                        {% else %}
+                            <span class="text-muted">Unassigned</span>
+                        {% endif %}
+                    </div>
+                    <div class="detail-field">
+                        <span class="detail-label">Due Date</span>
+                        {% if todo.dueDate %}
+                            <span class="{{ todo.dueDate < date() and todo.status.value != 'done' ? 'overdue' : '' }}">{{ todo.dueDate|date('M d, Y') }}</span>
+                        {% else %}
+                            <span class="text-muted">No due date</span>
+                        {% endif %}
+                    </div>
+                    <div class="detail-field">
+                        <span class="detail-label">Created</span>
+                        <span>{{ todo.createdAt|date('M d, Y') }}</span>
+                    </div>
+                </div>
+
+                {% if canEdit and timeEntryForm %}
+                    <div class="detail-card">
+                        <h3>Log Time</h3>
+                        {{ form_start(timeEntryForm, {attr: {class: 'log-time-form'}}) }}
+                            <div class="form-group">
+                                {{ form_label(timeEntryForm.hours) }}
+                                {{ form_widget(timeEntryForm.hours, {attr: {class: 'form-input'}}) }}
+                                {{ form_errors(timeEntryForm.hours) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(timeEntryForm.date) }}
+                                {{ form_widget(timeEntryForm.date, {attr: {class: 'form-input'}}) }}
+                                {{ form_errors(timeEntryForm.date) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(timeEntryForm.note) }}
+                                {{ form_widget(timeEntryForm.note, {attr: {class: 'form-input form-textarea'}}) }}
+                                {{ form_errors(timeEntryForm.note) }}
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm" style="width: 100%">Log Time</button>
+                        {{ form_end(timeEntryForm) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

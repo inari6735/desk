@@ -72,7 +72,7 @@
                         {% for todo in project.todos|filter(t => t.status.value == statusValue) %}
                             <div class="todo-card">
                                 <div class="todo-card-header">
-                                    <div class="todo-title">{{ todo.title }}</div>
+                                    <a href="{{ path('app_todo_show', {id: todo.id}) }}" class="todo-title-link">{{ todo.title }}</a>
                                     {% if canEditTodo %}
                                         <div class="todo-actions">
                                             <a href="{{ path('app_todo_edit', {id: todo.id}) }}" class="todo-action" title="Edit">&#9998;</a>

@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\TimeEntry;
 use App\Entity\Todo;
 use App\Enum\ProjectPermission;
+use App\Form\TimeEntryFormType;
 use App\Form\TodoFormType;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,6 +37,44 @@ class TodoController extends AbstractController
         return $this->render('todo/index.html.twig', [
             'todos' => $todos,
             'editableTodos' => $editableTodos,
+        ]);
+    }
+
+    #[Route('/todos/{id}', name: 'app_todo_show', priority: -1)]
+    public function show(Todo $todo, Request $request, EntityManagerInterface $em): Response
+    {
+        $project = $todo->getProject();
+        $this->denyAccessUnlessGranted(ProjectPermission::VIEW->value, $project);
+
+        $canEdit = $this->isGranted(ProjectPermission::EDIT_TODO->value, $project);
+
+        $timeEntryForm = null;
+        if ($canEdit) {
+            $timeEntry = new TimeEntry();
+            $timeEntry->setTodo($todo);
+            $timeEntry->setUser($this->getUser());
+
+            $timeEntryForm = $this->createForm(TimeEntryFormType::class, $timeEntry);
+            $timeEntryForm->handleRequest($request);
+
+            if ($timeEntryForm->isSubmitted() && $timeEntryForm->isValid()) {
+                $em->persist($timeEntry);
+
+                // Update the cached spentHours on the todo
+                $todo->setSpentHours($todo->getTotalLoggedHours() + $timeEntry->getHours());
+                $em->flush();
+
+                $this->addFlash('success', sprintf('Logged %.1fh.', $timeEntry->getHours()));
+
+                return $this->redirectToRoute('app_todo_show', ['id' => $todo->getId()]);
+            }
+        }
+
+        return $this->render('todo/show.html.twig', [
+            'todo' => $todo,
+            'project' => $project,
+            'canEdit' => $canEdit,
+            'timeEntryForm' => $timeEntryForm,
         ]);
     }
 

@@ -812,66 +812,93 @@ a:hover {
     margin-bottom: var(--cds-spacing-06);
 }
 
-.action-breakdown h2 {
+.action-breakdown-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--cds-spacing-05);
+}
+
+.action-breakdown-header h2 {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--cds-text-secondary);
-    margin-bottom: var(--cds-spacing-04);
+    margin: 0;
 }
 
-.action-bar {
+.action-breakdown-total {
+    font-size: 0.75rem;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--cds-text-secondary);
+}
+
+.action-rows {
     display: flex;
-    height: 8px;
-    overflow: hidden;
-    gap: 1px;
-    margin-bottom: var(--cds-spacing-04);
+    flex-direction: column;
+    gap: var(--cds-spacing-04);
 }
 
-.action-bar-segment {
-    min-width: 4px;
-    transition: opacity 0.1s;
-}
-
-.action-bar-segment:hover {
-    opacity: 0.8;
-}
-
-.action-legend {
+.action-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0.25rem var(--cds-spacing-06);
+    grid-template-columns: 120px 1fr 100px;
+    align-items: center;
+    gap: var(--cds-spacing-04);
 }
 
-.action-legend-item {
+.action-row-label {
     display: flex;
     align-items: center;
     gap: var(--cds-spacing-03);
-    font-size: 0.75rem;
 }
 
-.action-legend-dot {
-    width: 10px;
-    height: 10px;
+.action-row-dot {
+    width: 8px;
+    height: 8px;
     flex-shrink: 0;
 }
 
-.action-legend-label {
-    flex: 1;
-    color: var(--cds-text-secondary);
+.action-row-name {
+    font-size: 0.8125rem;
+    color: var(--cds-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.action-legend-value {
+.action-row-bar-wrap {
+    min-width: 0;
+}
+
+.action-row-bar {
+    height: 20px;
+    background: var(--cds-background);
+    overflow: hidden;
+}
+
+.action-row-fill {
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.action-row-stats {
+    display: flex;
+    align-items: center;
+    gap: var(--cds-spacing-03);
+    justify-content: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8125rem;
+}
+
+.action-row-hours {
     font-weight: 600;
-    font-family: 'IBM Plex Mono', monospace;
 }
 
-.action-legend-pct {
+.action-row-pct {
     color: var(--cds-text-secondary);
-    min-width: 2.5rem;
+    min-width: 2rem;
     text-align: right;
-    font-family: 'IBM Plex Mono', monospace;
 }
 
 /* === Overrun Panel === */
@@ -1571,6 +1598,10 @@ a.employee-card:hover {
     .profile-grid { grid-template-columns: 1fr; }
 
     .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+
+    .action-row {
+        grid-template-columns: 100px 1fr 80px;
+    }
 
     .navbar {
         flex-wrap: wrap;

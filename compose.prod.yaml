@@ -8,5 +8,5 @@ services:
             target: frankenphp_prod
         environment:
             APP_SECRET: ${APP_SECRET:-4f2d9c8b7a1e6f03c5b91d72e8a4f6c1b3d9e7a2f5c8b1d4e6f0a9c3b7d2e1f}
-            MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
-            MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
+            MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-ChangeThisMercureHubJWTSecretKey}
+            MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-ChangeThisMercureHubJWTSecretKey}

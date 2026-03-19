@@ -380,6 +380,29 @@ a:hover {
     line-height: 1;
 }
 
+/* === Impersonation Bar === */
+.impersonate-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--cds-spacing-04);
+    padding: var(--cds-spacing-03) var(--cds-spacing-05);
+    background: #f1c21b;
+    color: #161616;
+    font-size: 0.8125rem;
+}
+
+.impersonate-exit {
+    background: #161616;
+    color: #f1c21b;
+    border: none;
+    font-size: 0.75rem;
+}
+
+.impersonate-exit:hover {
+    background: #393939;
+}
+
 /* === Nav Links === */
 .navbar-nav {
     display: flex;

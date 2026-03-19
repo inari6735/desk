@@ -26,6 +26,9 @@ security:
             custom_authenticators:
                 - App\Security\GoogleAuthenticator
             entry_point: form_login
+            switch_user:
+                role: ROLE_ADMIN
+                parameter: _switch_user
             logout:
                 path: app_logout
                 target: app_home

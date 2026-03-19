@@ -1,3 +1,9 @@
+{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+    <div class="impersonate-bar">
+        <span>Impersonating <strong>{{ app.user.displayName }}</strong> ({{ app.user.email }})</span>
+        <a href="{{ path('app_home', {_switch_user: '_exit'}) }}" class="btn btn-sm impersonate-exit">Exit</a>
+    </div>
+{% endif %}
 <nav class="navbar">
     <a href="{{ path('app_home') }}" class="navbar-brand">CREATIVEDESK</a>
     <div class="navbar-nav">

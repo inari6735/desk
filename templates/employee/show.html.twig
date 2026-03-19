@@ -25,6 +25,11 @@
                     {% if employee.position %}
                         <span class="position-badge" style="--pos-color: {{ employee.position.color }}">{{ employee.position.label }}</span>
                     {% endif %}
+                    {% if is_granted('ROLE_ADMIN') and employee != app.user %}
+                        <div style="margin-top: var(--cds-spacing-03)">
+                            <a href="{{ path('app_home', {_switch_user: employee.email}) }}" class="btn btn-outline btn-sm">Impersonate</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 

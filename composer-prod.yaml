@@ -1,0 +1,59 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: creativedesk_app
+        restart: unless-stopped
+        environment:
+            APP_ENV: prod
+            APP_DEBUG: 0
+
+            # Symfony / Doctrine
+            DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-change_me_strong_password}@database:5432/${POSTGRES_DB:-app}?serverVersion=16&charset=utf8
+
+            # FrankenPHP / Caddy
+            SERVER_NAME: ${SERVER_NAME:-creativedesk.odi-services.pl}
+
+            # Opcjonalnie: limit pamięci dla runtime Go w kontenerze
+            GOMEMLIMIT: 256MiB
+        depends_on:
+            database:
+                condition: service_healthy
+        ports:
+            - "80:80"
+            - "443:443"
+            - "443:443/udp"
+        volumes:
+            - caddy_data:/data
+            - caddy_config:/config
+        networks:
+            - app_net
+
+    database:
+        image: postgres:${POSTGRES_VERSION:-16}-alpine
+        container_name: creativedesk_db
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB:-app}
+            POSTGRES_USER: ${POSTGRES_USER:-app}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_strong_password}
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_DB:-app} -U ${POSTGRES_USER:-app}"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+        volumes:
+            - database_data:/var/lib/postgresql/data:rw
+        networks:
+            - app_net
+
+volumes:
+    database_data:
+    caddy_data:
+    caddy_config:
+
+networks:
+    app_net:
+        driver: bridge

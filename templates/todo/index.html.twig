@@ -11,23 +11,70 @@
             <div class="flash flash-success">{{ message }}</div>
         {% endfor %}
 
-        <div class="page-header">
-            <h1>My Todos</h1>
+        <div class="page-header page-header-row">
+            <h1>My Todos <span class="text-muted" style="font-weight: 400; font-size: 1rem">({{ total }})</span></h1>
         </div>
+
+        {# Filters #}
+        <form class="todo-filters" method="get" action="{{ path('app_todos') }}">
+            <div class="todo-filters-row">
+                <div class="form-group todo-filter-search">
+                    <input type="text" name="q" value="{{ search }}" class="form-input" placeholder="Search todos...">
+                </div>
+                <div class="form-group">
+                    <select name="status" class="form-input">
+                        <option value="">All statuses</option>
+                        {% for s in statuses %}
+                            <option value="{{ s.value }}" {{ statusFilter and statusFilter.value == s.value ? 'selected' : '' }}>{{ s.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select name="project" class="form-input">
+                        <option value="">All projects</option>
+                        {% for p in projects %}
+                            <option value="{{ p.id }}" {{ projectId == p.id|default('') ? 'selected' : '' }}>{{ p.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="hidden" name="sort" value="{{ sort }}">
+                <input type="hidden" name="dir" value="{{ direction }}">
+                <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                {% if search or statusFilter or projectId %}
+                    <a href="{{ path('app_todos') }}" class="btn btn-outline btn-sm">Clear</a>
+                {% endif %}
+            </div>
+        </form>
 
         {% if todos is empty %}
             <div class="empty-state">
-                <p>No todos assigned to you.</p>
+                <p>{% if search or statusFilter or projectId %}No todos match your filters.{% else %}No todos assigned to you.{% endif %}</p>
             </div>
         {% else %}
+            {# Sortable macro #}
+            {% macro sort_link(label, field, currentSort, currentDir, params) %}
+                {% set isActive = currentSort == field %}
+                {% set nextDir = isActive and currentDir == 'ASC' ? 'DESC' : 'ASC' %}
+                {% set linkParams = params|merge({sort: field, dir: nextDir, page: 1}) %}
+                <a href="{{ path('app_todos', linkParams) }}" class="sort-link {{ isActive ? 'sort-active' : '' }}">
+                    {{ label }}
+                    {% if isActive %}
+                        <span class="sort-arrow">{{ currentDir == 'ASC' ? '&#9650;' : '&#9660;' }}</span>
+                    {% endif %}
+                </a>
+            {% endmacro %}
+
+            {% set filterParams = {q: search, status: statusFilter ? statusFilter.value : '', project: projectId} %}
+
             <div class="todo-table">
                 <table>
                     <thead>
                         <tr>
-                            <th>Title</th>
+                            <th>{{ _self.sort_link('Title', 'title', sort, direction, filterParams) }}</th>
                             <th>Project</th>
-                            <th>Status</th>
-                            <th>Due Date</th>
+                            <th>{{ _self.sort_link('Status', 'status', sort, direction, filterParams) }}</th>
+                            <th>{{ _self.sort_link('Due Date', 'dueDate', sort, direction, filterParams) }}</th>
+                            <th>Hours</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -37,8 +84,12 @@
                             <tr>
                                 <td>
                                     <a href="{{ path('app_todo_show', {id: todo.id}) }}" class="todo-title-link">{{ todo.title }}</a>
-                                    {% if todo.description %}
-                                        <span class="todo-description">{{ todo.description|u.truncate(60, '...') }}</span>
+                                    {% if todo.taskGroups|length > 0 %}
+                                        <span class="todo-table-groups">
+                                            {% for group in todo.taskGroups %}
+                                                <span class="group-badge" {% if group.color %}style="--group-color: {{ group.color }}"{% endif %}>{{ group.name }}</span>
+                                            {% endfor %}
+                                        </span>
                                     {% endif %}
                                 </td>
                                 <td>
@@ -60,6 +111,18 @@
                                         <span class="text-muted">-</span>
                                     {% endif %}
                                 </td>
+                                <td>
+                                    {% if todo.spentHours or todo.estimatedHours %}
+                                        <span class="todo-table-hours">
+                                            {{ (todo.spentHours ?? 0)|number_format(1) }}h
+                                            {% if todo.estimatedHours %}
+                                                <span class="text-muted">/ {{ todo.estimatedHours|number_format(1) }}h</span>
+                                            {% endif %}
+                                        </span>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
                                 <td class="table-actions">
                                     {% if canEdit %}
                                         <a href="{{ path('app_todo_edit', {id: todo.id}) }}" class="btn btn-outline btn-xs">Edit</a>
@@ -70,6 +133,29 @@
                     </tbody>
                 </table>
             </div>
+
+            {# Pagination #}
+            {% if pages > 1 %}
+                <nav class="pagination">
+                    {% if page > 1 %}
+                        <a href="{{ path('app_todos', filterParams|merge({sort: sort, dir: direction, page: page - 1})) }}" class="pagination-link">&larr; Prev</a>
+                    {% endif %}
+
+                    {% for p in 1..pages %}
+                        {% if p == page %}
+                            <span class="pagination-link pagination-current">{{ p }}</span>
+                        {% elseif p == 1 or p == pages or (p >= page - 2 and p <= page + 2) %}
+                            <a href="{{ path('app_todos', filterParams|merge({sort: sort, dir: direction, page: p})) }}" class="pagination-link">{{ p }}</a>
+                        {% elseif p == page - 3 or p == page + 3 %}
+                            <span class="pagination-ellipsis">&hellip;</span>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < pages %}
+                        <a href="{{ path('app_todos', filterParams|merge({sort: sort, dir: direction, page: page + 1})) }}" class="pagination-link">Next &rarr;</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
         {% endif %}
     </main>
 </div>

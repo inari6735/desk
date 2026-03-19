@@ -6,8 +6,10 @@ use App\Entity\Project;
 use App\Entity\TimeEntry;
 use App\Entity\Todo;
 use App\Enum\ProjectPermission;
+use App\Enum\TodoStatus;
 use App\Form\TimeEntryFormType;
 use App\Form\TodoFormType;
+use App\Repository\ProjectRepository;
 use App\Repository\TodoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,28 +17,61 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Uid\Uuid;
 
 #[IsGranted('ROLE_USER')]
 class TodoController extends AbstractController
 {
     #[Route('/todos', name: 'app_todos')]
-    public function index(TodoRepository $todoRepository): Response
+    public function index(Request $request, TodoRepository $todoRepository, ProjectRepository $projectRepository): Response
     {
-        $todos = $todoRepository->findBy(
-            ['assignedTo' => $this->getUser()],
-            ['createdAt' => 'DESC'],
+        $search = $request->query->getString('q');
+        $statusFilter = TodoStatus::tryFrom($request->query->getString('status'));
+        $projectIdStr = $request->query->getString('project');
+        $projectId = $projectIdStr ? Uuid::fromString($projectIdStr) : null;
+        $sort = $request->query->getString('sort', 'createdAt');
+        $direction = $request->query->getString('dir', 'DESC');
+        $page = max(1, $request->query->getInt('page', 1));
+
+        $result = $todoRepository->paginateUserTodos(
+            $this->getUser(),
+            $page,
+            15,
+            $search ?: null,
+            $statusFilter,
+            $projectId,
+            $sort,
+            $direction,
         );
 
         $editableTodos = [];
-        foreach ($todos as $todo) {
+        foreach ($result['items'] as $todo) {
             if ($todo->getProject() && $this->isGranted(ProjectPermission::EDIT_TODO->value, $todo->getProject())) {
                 $editableTodos[$todo->getId()->toRfc4122()] = true;
             }
         }
 
+        // Projects for filter dropdown
+        $userProjects = $projectRepository->createQueryBuilder('p')
+            ->where('p.id IN (SELECT IDENTITY(t2.project) FROM App\Entity\Todo t2 WHERE t2.assignedTo = :user)')
+            ->setParameter('user', $this->getUser())
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+
         return $this->render('todo/index.html.twig', [
-            'todos' => $todos,
+            'todos' => $result['items'],
+            'total' => $result['total'],
+            'pages' => $result['pages'],
+            'page' => $page,
             'editableTodos' => $editableTodos,
+            'search' => $search,
+            'statusFilter' => $statusFilter,
+            'projectId' => $projectIdStr,
+            'sort' => $sort,
+            'direction' => $direction,
+            'projects' => $userProjects,
+            'statuses' => TodoStatus::cases(),
         ]);
     }
 

@@ -1177,6 +1177,114 @@ a:hover {
 .todo-table .todo-description { font-size: 0.75rem; color: var(--cds-text-secondary); display: block; margin-top: 0.125rem; }
 .text-muted { color: var(--cds-text-secondary); }
 
+/* === Todo Filters === */
+.todo-filters {
+    background: var(--cds-layer-01);
+    padding: var(--cds-spacing-04) var(--cds-spacing-05);
+    margin-bottom: var(--cds-spacing-06);
+}
+
+.todo-filters-row {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--cds-spacing-03);
+    flex-wrap: wrap;
+}
+
+.todo-filter-search {
+    flex: 1;
+    min-width: 180px;
+}
+
+.todo-filters-row .form-group {
+    margin: 0;
+}
+
+.todo-filters-row select.form-input {
+    min-width: 140px;
+}
+
+/* Sort Links */
+.sort-link {
+    color: var(--cds-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
+
+.sort-link:hover {
+    color: var(--cds-text-primary);
+    text-decoration: none;
+}
+
+.sort-active {
+    color: var(--cds-interactive);
+}
+
+.sort-arrow {
+    font-size: 0.6rem;
+}
+
+/* Todo Table Extras */
+.todo-table-groups {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.todo-table-hours {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+}
+
+/* === Pagination === */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    margin-top: var(--cds-spacing-06);
+    background: var(--cds-border-subtle);
+}
+
+.pagination-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 var(--cds-spacing-04);
+    font-size: 0.875rem;
+    background: var(--cds-layer-01);
+    color: var(--cds-text-primary);
+    transition: background 0.1s;
+}
+
+.pagination-link:hover {
+    background: var(--cds-layer-hover);
+    text-decoration: none;
+}
+
+.pagination-current {
+    background: var(--cds-interactive);
+    color: var(--cds-text-on-color);
+    font-weight: 600;
+}
+
+.pagination-ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2.5rem;
+    background: var(--cds-layer-01);
+    color: var(--cds-text-secondary);
+    font-size: 0.875rem;
+}
+
 /* === Page Header Row === */
 .page-header-row {
     display: flex;

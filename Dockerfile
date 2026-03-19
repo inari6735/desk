@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:1-php8.4-bookworm
+FROM dunglas/frankenphp
 
 WORKDIR /app
 
@@ -10,7 +10,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     unzip \
     libpq-dev \
-    && docker-php-ext-install pdo_pgsql opcache \
+    libicu-dev \
+    libzip-dev \
+    && docker-php-ext-install \
+        pdo_pgsql \
+        opcache \
+        intl \
+        zip \
+        gd \
     && rm -rf /var/lib/apt/lists/*
 
 # Composer
@@ -31,14 +38,16 @@ RUN composer install \
 COPY . .
 
 # Symfony: cache/logs
-RUN mkdir -p var/cache var/log \
-    && chown -R www-data:www-data /app/var
+RUN mkdir -p var/cache var/log public \
+    && chown -R www-data:www-data /app/var /app/public
 
 # Caddy / FrankenPHP config
 COPY docker/Caddyfile /etc/frankenphp/Caddyfile
 
-# Build assetów / cache opcjonalnie:
+# Build assetów / cache opcjonalnie
 RUN composer dump-env prod || true \
+    && php bin/console asset-map:compile --env=prod || true \
+    && php bin/console assets:install public --env=prod || true \
     && php bin/console cache:clear --env=prod || true \
     && php bin/console cache:warmup --env=prod || true
 

@@ -30,7 +30,9 @@ RUN <<-EOF
 		intl \
 		opcache \
 		zip \
-		pdo_pgsql
+		pdo_pgsql \
+		xml \
+		dom
 	rm -rf /var/lib/apt/lists/*
 EOF
 
